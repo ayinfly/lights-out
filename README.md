@@ -11,8 +11,6 @@ Brief project description and motivation.
 2. **Data Introduction:** Introduce the dataset and state the central question.
 3. **Dataset Information:** Report the dataset size, relevant column names, and column descriptions.
 
-### Report on Website
-
 Include the introduction from the notebook, dataset information, and the central question.
 
 ## Requirement: Cleaning and EDA
