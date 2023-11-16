@@ -24,7 +24,7 @@ Here’s the head of the cleaned DataFrame:
 
 ## Univariate Analysis
 We first looked at the distribution of the ‘OUTAGE.DURATION’ column. The plot below shows that most power outages last less than 500 minutes, but there are some outages that last much longer.
-<iframe src="Assets\avg_outage_duration.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="Assets/avg_outage_duration.html" width=800 height=600 frameBorder=0></iframe>
 
 
 ## Bivariate Analysis
