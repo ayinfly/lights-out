@@ -6,7 +6,7 @@ by Luke Lin (lul018@ucsd.edu) & Andrew ()
 
 ## Introduction 
 
-In this project, we analyze a dataset of power outages across different U.S. states. The dataset provides detailed information about each power outage, including the cause, duration, number of customers affected, and various other factors. Our analysis is centered around the question: “What are the main factors influencing the duration and impact of power outages?”
+In this project, we analyze a dataset of power outages across different U.S. states. The dataset provides detailed information about each power outage, including the cause, duration, number of customers affected, and various other factors. Our analysis is centered around the question: “How has outage handling improved over the last decade?”
 
 The dataset contains 1000 rows and the following columns are relevant to our question:
 - ‘U.S._STATE’: The state where the power outage occurred.
@@ -104,11 +104,11 @@ Below shows the Heap Map representation of the number of customers affected.
 
 ### NMAR Analysis
 
-In this section, we explored the possibility of Non-Missing at Random (NMAR) in our dataset. While no code is provided for this analysis (as NMAR determination involves reasoning about the data generating process), we believe that the column 'OUTAGE.DURATION' is likely NMAR. This belief stems from the understanding that detailed descriptions of event categories in 'CAUSE.CATEGORY.DETAIL' could result in complex and non-random missingness. Additional data on the uniqueness or complexity of the cause might help make it Missing at Random (MAR).
+In this section, we explored the possibility of Non-Missing at Random (NMAR) in our dataset. While no code is provided for this analysis (as NMAR determination involves reasoning about the data generating process), we believe that the column 'CAUSE.CATEGORY.DETAIL' is likely NMAR. This belief stems from the understanding that detailed descriptions of event categories in 'CAUSE.CATEGORY.DETAIL' could result in complex and non-random missingness. Additional data on the uniqueness or complexity of the cause might help make it Missing at Random (MAR).
 
 ### Missingness Dependency
 
-We chose 'OUTAGE.DURATION' for analysis due to its non-trivial missingness. Permutation tests were performed to analyze the dependency of the missingness of 'OUTAGE.DURATION' on other columns.
+Since our question is based around whether outage handling has improved over time, we chose 'OUTAGE.DURATION' for analysis due to its non-trivial missingness and its contribution to measuring improvements in outage handling. Permutation tests were performed to analyze the dependency of the missingness of 'OUTAGE.DURATION' on other columns.
 
 - **Dependency on 'CUSTOMERS.AFFECTED':** [Insert interpretation here based on the test result]
 - **Dependency on 'TOTAL.SALES':** [Insert interpretation here based on the test result]
