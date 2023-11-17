@@ -100,29 +100,34 @@ Below shows the Heap Map representation of the number of customers affected.
 <iframe src="Assets/heatMap.html" width=800 height=600 frameBorder=0></iframe>
 
 
+## Missingness Analysis
+
+### NMAR Analysis
+
+In this section, we explored the possibility of Non-Missing at Random (NMAR) in our dataset. While no code is provided for this analysis (as NMAR determination involves reasoning about the data generating process), we believe that the column 'OUTAGE.DURATION' is likely NMAR. This belief stems from the understanding that detailed descriptions of event categories in 'CAUSE.CATEGORY.DETAIL' could result in complex and non-random missingness. Additional data on the uniqueness or complexity of the cause might help make it Missing at Random (MAR).
+
 ### Missingness Dependency
 
-#### Analysis in Notebook
+We chose 'OUTAGE.DURATION' for analysis due to its non-trivial missingness. Permutation tests were performed to analyze the dependency of the missingness of 'OUTAGE.DURATION' on other columns.
 
-1. **Permutation Tests:** Analyze missingness dependency using permutation tests.
-2. **Results Presentation:** Embed a Plotly plot and interpret the results.
+- **Dependency on 'CUSTOMERS.AFFECTED':** [Insert interpretation here based on the test result]
+- **Dependency on 'TOTAL.SALES':** [Insert interpretation here based on the test result]
 
-#### Report on Website
-
-Embed a link to the notebook's missingness dependency section and provide a brief summary.
-
-## Requirement: Hypothesis Testing
+Visualization: The histogram shows the distribution of 'CUSTOMERS.AFFECTED' concerning missingness of 'OUTAGE.DURATION.'
 
 ### Hypothesis Testing
 
-#### Analysis in Notebook
+We formulated a hypothesis test, with the following components:
 
-1. **Hypotheses:** Clearly state hypotheses and perform a hypothesis or permutation test.
-2. **Test Results:** Report the test details and conclusion.
+- **Null Hypothesis (H0)**: [Insert null hypothesis here]
+- **Alternative Hypothesis (H1)**: [Insert alternative hypothesis here]
+- **Test Statistic**: [Insert chosen test statistic here]
+- **Significance Level**: [Insert chosen significance level here]
+- **P-value**: [Insert calculated p-value here]
+- **Conclusion**: [Insert conclusion here]
 
-#### Report on Website
-
-Embed a link to the notebook's hypothesis testing section and provide a brief summary.
+Visualization: Optionally, include a visualization related to the hypothesis test.
+Include Optiontional Graph
 
 ## Conclusion
 
