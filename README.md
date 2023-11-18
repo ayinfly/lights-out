@@ -1,16 +1,20 @@
 # Analysis of Power Outages
 
-by Luke Lin (lul018@ucsd.edu) & Andrew ()
+by Luke Lin (lul018@ucsd.edu) & Andrew (anyin@ucsd.edu)
 
 ---
 
 ## Introduction 
 
-In this project, we analyze a dataset of power outages across different U.S. states. The dataset provides detailed information about each power outage, including the cause, duration, number of customers affected, and various other factors. Our analysis is centered around the question: “How has outage handling improved over the last decade?”
+Welcome to our exploration of a comprehensive dataset detailing power outages across various U.S. states. Power outages are critical events that impact individuals, communities, and businesses, influencing everything from daily routines to economic activities. Understanding the dynamics of power outages is crucial for devising strategies to improve outage management and enhance the resilience of power infrastructure.
 
-The dataset contains over 1000 rows and the following columns are relevant to our question:
+The dataset at the heart of our analysis provides a wealth of information about each power outage, encompassing details such as the cause of the outage, its duration, the number of customers affected, and additional factors that contribute to the complexity of outage events. By delving into this dataset, we aim to answer a pivotal question: “How has outage handling improved over the last decade?”
 
-## Essential Columns Explanation
+Why should you, as a reader, care about this dataset and our central question? Power outages are not merely inconveniences; they have far-reaching implications for individuals, businesses, and society at large. An examination of how outage handling practices have evolved over time can offer insights into the efficacy of measures implemented to mitigate outage impacts. This analysis is particularly relevant in a world increasingly dependent on a consistent and reliable power supply for various aspects of daily life.
+
+## Dataset Overview
+
+Our dataset encompasses over 1000 rows, each representing a distinct power outage event. The columns relevant to our central question include:
 
 ### U.S._STATE
 - **Description:** The state where the power outage occurred.
