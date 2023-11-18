@@ -1,6 +1,6 @@
-# Analysis of Power Outages
+# Empowering Resilience: Unraveling the Tapestry of Power Outages Over a Decade
 
-by Luke Lin (lul018@ucsd.edu) & Andrew (anyin@ucsd.edu)
+by Luke Lin (lul018@ucsd.edu) & Andrew Yin (anyin@ucsd.edu)
 
 ---
 
@@ -60,6 +60,8 @@ Our dataset encompasses over 1000 rows, each representing a distinct power outag
 
 Here’s the head of the DataFrame:
 
+<div class="table-wrapper" markdown="block">
+
 | U.S._STATE   | OUTAGE.START        | OUTAGE.RESTORATION   |   CUSTOMERS.AFFECTED |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   RES.PRICE | NERC.REGION   | CLIMATE.REGION     | CAUSE.CATEGORY     |   TOTAL.SALES |
 |:-------------|:--------------------|:---------------------|---------------------:|------------------:|-----------------:|------------:|:--------------|:-------------------|:-------------------|--------------:|
 | Minnesota    | 2011-07-01 17:00:00 | 2011-07-03 20:00:00  |                70000 |              3060 |              nan |       11.6  | MRO           | East North Central | severe weather     |       6562520 |
@@ -67,6 +69,8 @@ Here’s the head of the DataFrame:
 | Minnesota    | 2010-10-26 20:00:00 | 2010-10-28 22:00:00  |                70000 |              3000 |              nan |       10.87 | MRO           | East North Central | severe weather     |       5222116 |
 | Minnesota    | 2012-06-19 04:30:00 | 2012-06-20 23:00:00  |                68200 |              2550 |              nan |       11.79 | MRO           | East North Central | severe weather     |       5787064 |
 | Minnesota    | 2015-07-18 02:00:00 | 2015-07-19 07:00:00  |               250000 |              1740 |              250 |       13.07 | MRO           | East North Central | severe weather     |       5970339 |
+
+</div>
 
 In the next sections, we will illustrate the process through which we obtained this cleaned dataframe. Additionally, we will employ compelling visualizations to delve deeper into our primary research question.
 
@@ -211,25 +215,65 @@ In this section, we explored the possibility of Non-Missing at Random (NMAR) in 
 
 Since our question is based around whether outage handling has improved over time, we chose 'OUTAGE.DURATION' for analysis due to its non-trivial missingness and its contribution to measuring improvements in outage handling. Permutation tests were performed to analyze the dependency of the missingness of 'OUTAGE.DURATION' on other columns.
 
-- **Dependency on 'CUSTOMERS.AFFECTED':** [Insert interpretation here based on the test result]
-- **Dependency on 'TOTAL.SALES':** [Insert interpretation here based on the test result]
+- **Dependency on 'CUSTOMERS.AFFECTED':**
+Null Hypothesis: The missingness of outage duration does not depend on customers affected.
 
-Visualization: The histogram shows the distribution of 'CUSTOMERS.AFFECTED' concerning missingness of 'OUTAGE.DURATION.'
+Alternative Hypothesis: The missingness of outage duration depends on customers affected.
+
+We created a new boolean column to indicate missing values in our OUTAGE.DURATION column and used the Kolmogorov-Smirnov test to get a p-value of 0.34 which is higher than our significane level of 0.05. This means we fail to reject the null hypothesis. Below we have a visualization of the two distributions and can see that distribution of CUSTOMERS.AFFECTED is similar in both cases, and that it is likely the missingness of CUSTOMERS.AFFECTED does not depend on the OUTAGE.DURATION column.
+
+<iframe src="Assets/missing1.html" width=800 height=600 frameBorder=0></iframe>
+From the graph above we can see that the distribution of customers affected appears to be similar regardless of the missing data in outage duration.
+
+- **Dependency on 'TOTAL.SALES':** Null Hypothesis: The missingness of outage duration does not depend on total sales.
+
+Alternative Hypothesis: The missingness of outage duration depends on total sales.
+
+We created a new boolean column to indicate missing values in our OUTAGE.DURATION column and used the Kolmogorov-Smirnov test to get a p-value of 0.00 which is lower than our significane level of 0.05. This means we reject the null hypothesis. Below we have a visualization of the two distributions and can see that distribution of TOTAL.SALES is different in both cases, and that it is likely the missingness of CUSTOMERS.AFFECTED does depend on the TOTAL.SALES column.
+
+<iframe src="Assets/missing2.html" width=800 height=600 frameBorder=0></iframe>
+From the graph above we can see that there tends to be a skew towards lower total sales when it comes to missingness of outage duration.
+
+
 
 ### Hypothesis Testing
 
-We formulated a hypothesis test, with the following components:
+# Permutation Test for Mean Outage Duration (2005 vs. 2015)
+In this section, we perform a permutation test to assess whether there is a significant difference in the mean outage duration between the years 2005 and 2015.
 
-- **Null Hypothesis (H0)**: [Insert null hypothesis here]
-- **Alternative Hypothesis (H1)**: [Insert alternative hypothesis here]
-- **Test Statistic**: [Insert chosen test statistic here]
-- **Significance Level**: [Insert chosen significance level here]
-- **P-value**: [Insert calculated p-value here]
-- **Conclusion**: [Insert conclusion here]
+## Hypotheses
+- **Null Hypothesis (H0):** There is no difference in mean outage duration for outages that occured in 2005 and in 2015.
+- **Alternative Hypothesis (H1):** The mean outage duration for outages that occured in 2005 is larger than those that occured in 2015.
 
-Visualization: Optionally, include a visualization related to the hypothesis test.
-Include Optiontional Graph
+## Test Statistic
+We choose the difference in mean outage duration between the two years as our test statistic. The observed difference is calculated using the actual data, and we compare this against a distribution of differences obtained by shuffling the outage duration data.
+
+## Significance Level
+We set the significance level at 0.05, which is a common choice in hypothesis testing.
+
+## Justification
+- The choice of a permutation test is appropriate when the assumptions of parametric tests are not met, or the distribution of the data is unknown.
+- We use a one-sided test as we believe outage handling is unlikely to have gotten worse and we are only concerned with how its improved.
+- The test statistic (difference in means) aligns with the question of interest, comparing the average outage duration between the two years.
+- A significance level of 0.05 is commonly used and provides a balance between Type I and Type II errors.
+
+## Permutation Test Procedure
+- **Data Preparation:**
+We filter the dataset to include only rows from the years 2005 and 2015.
+Missing values are dropped from the dataset.
+- **Observation:**
+The observed difference in mean outage duration between 2005 and 2015 is computed.
+- **Permutation Test Loop (500 Repetitions):**
+In each iteration, the outage duration data is shuffled, and the difference in mean outage duration is calculated.
+These differences form a distribution under the null hypothesis.
+- **P-value Calculation:**
+The proportion of permuted mean differences that are greater than or equal to the observed difference is calculated.
+- **Results**
+The resulting p-value is the probability of observing a difference in mean outage duration as extreme as the observed difference under the assumption that there is no true difference between the years 2005 and 2015.
+
+<iframe src="Assets/conclusion.html" width=800 height=600 frameBorder=0></iframe>
+From the figure about we can see the distribution of mean differences that we found when experimenting. Our observed mean difference went far beyond the 0.05th percentile and we can clearly see it is unlikely there is no difference between the groups.
 
 ## Conclusion
-
-Summarize the key findings, limitations, and potential future work.
+**P-value: 0.0**
+**Conclusion:** Since our p-value is less than the chosen significance level (0.05), we reject the null hypothesis in favor of the alternative hypothesis, suggesting a significant difference in mean outage duration between the years 2005 and 2015. From our tests, we have sufficient evidence to reject our null hypothesis. We therefore reject the idea that outage durations have stayed the same over the past 10 years.

@@ -7482,8 +7482,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Power-Outage">Power Outage<a class="anchor-link" href="#Power-Outage">¶</a></h1><p><strong>Name(s)</strong>: Luke, Andrew</p>
-<p><strong>Website Link</strong>: (your website link)</p>
+<h1 id="Empowering-Resilience:-Unraveling-the-Tapestry-of-Power-Outages-Over-a-Decade">Empowering Resilience: Unraveling the Tapestry of Power Outages Over a Decade<a class="anchor-link" href="#Empowering-Resilience:-Unraveling-the-Tapestry-of-Power-Outages-Over-a-Decade">¶</a></h1><p><strong>Name(s)</strong>: Luke Lin, Andrew Yin</p>
+<p><strong>Website Link</strong>: <a href="https://lukelin15.github.io/Power-Outage-Analysis/">https://lukelin15.github.io/Power-Outage-Analysis/</a></p>
 </div>
 </div>
 </div>
@@ -7523,6 +7523,7 @@ a.anchor-link {
 <span class="kn">from</span> <span class="nn">folium.plugins</span> <span class="kn">import</span> <span class="n">HeatMap</span>
 
 <span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="s1">'plotly'</span>
 </pre></div>
 </div>
@@ -7573,8 +7574,23 @@ a.anchor-link {
 <span class="c1"># Replace "NA" with NaN for missing values</span>
 <span class="n">outage_cleaned</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"NA"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
+<span class="c1">#Essential Columns Analysis</span>
+<span class="n">essential_col</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"U.S._STATE"</span><span class="p">,</span> 
+    <span class="s1">'OUTAGE.START'</span><span class="p">,</span>
+    <span class="s2">"OUTAGE.RESTORATION"</span><span class="p">,</span> 
+    <span class="s2">"CUSTOMERS.AFFECTED"</span><span class="p">,</span> 
+    <span class="s2">"OUTAGE.DURATION"</span><span class="p">,</span> 
+    <span class="s2">"DEMAND.LOSS.MW"</span><span class="p">,</span> 
+    <span class="s2">"RES.PRICE"</span><span class="p">,</span> 
+    <span class="s2">"NERC.REGION"</span><span class="p">,</span> 
+    <span class="s2">"CLIMATE.REGION"</span><span class="p">,</span>
+    <span class="s2">"CAUSE.CATEGORY"</span><span class="p">,</span>
+    <span class="s2">"TOTAL.SALES"</span>
+<span class="p">]</span>
 <span class="c1"># Display the cleaned DataFrame</span>
-<span class="n">outage_cleaned</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">outage_cleaned</span> <span class="o">=</span> <span class="n">outage_cleaned</span><span class="p">[</span><span class="n">essential_col</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -7584,175 +7600,11 @@ a.anchor-link {
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
-<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/html" tabindex="0">
-<div>
-<style scoped="">
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-<thead>
-<tr style="text-align: right;">
-<th>4</th>
-<th>OBS</th>
-<th>YEAR</th>
-<th>MONTH</th>
-<th>U.S._STATE</th>
-<th>POSTAL.CODE</th>
-<th>NERC.REGION</th>
-<th>CLIMATE.REGION</th>
-<th>ANOMALY.LEVEL</th>
-<th>CLIMATE.CATEGORY</th>
-<th>CAUSE.CATEGORY</th>
-<th>...</th>
-<th>POPDEN_URBAN</th>
-<th>POPDEN_UC</th>
-<th>POPDEN_RURAL</th>
-<th>AREAPCT_URBAN</th>
-<th>AREAPCT_UC</th>
-<th>PCT_LAND</th>
-<th>PCT_WATER_TOT</th>
-<th>PCT_WATER_INLAND</th>
-<th>OUTAGE.START</th>
-<th>OUTAGE.RESTORATION</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<th>6</th>
-<td>1</td>
-<td>2011</td>
-<td>7</td>
-<td>Minnesota</td>
-<td>MN</td>
-<td>MRO</td>
-<td>East North Central</td>
-<td>-0.3</td>
-<td>normal</td>
-<td>severe weather</td>
-<td>...</td>
-<td>2279</td>
-<td>1700.5</td>
-<td>18.2</td>
-<td>2.14</td>
-<td>0.6</td>
-<td>91.592666</td>
-<td>8.407334</td>
-<td>5.478743</td>
-<td>2011-07-01 17:00:00</td>
-<td>2011-07-03 20:00:00</td>
-</tr>
-<tr>
-<th>7</th>
-<td>2</td>
-<td>2014</td>
-<td>5</td>
-<td>Minnesota</td>
-<td>MN</td>
-<td>MRO</td>
-<td>East North Central</td>
-<td>-0.1</td>
-<td>normal</td>
-<td>intentional attack</td>
-<td>...</td>
-<td>2279</td>
-<td>1700.5</td>
-<td>18.2</td>
-<td>2.14</td>
-<td>0.6</td>
-<td>91.592666</td>
-<td>8.407334</td>
-<td>5.478743</td>
-<td>2014-05-11 18:38:00</td>
-<td>2014-05-11 18:39:00</td>
-</tr>
-<tr>
-<th>8</th>
-<td>3</td>
-<td>2010</td>
-<td>10</td>
-<td>Minnesota</td>
-<td>MN</td>
-<td>MRO</td>
-<td>East North Central</td>
-<td>-1.5</td>
-<td>cold</td>
-<td>severe weather</td>
-<td>...</td>
-<td>2279</td>
-<td>1700.5</td>
-<td>18.2</td>
-<td>2.14</td>
-<td>0.6</td>
-<td>91.592666</td>
-<td>8.407334</td>
-<td>5.478743</td>
-<td>2010-10-26 20:00:00</td>
-<td>2010-10-28 22:00:00</td>
-</tr>
-<tr>
-<th>9</th>
-<td>4</td>
-<td>2012</td>
-<td>6</td>
-<td>Minnesota</td>
-<td>MN</td>
-<td>MRO</td>
-<td>East North Central</td>
-<td>-0.1</td>
-<td>normal</td>
-<td>severe weather</td>
-<td>...</td>
-<td>2279</td>
-<td>1700.5</td>
-<td>18.2</td>
-<td>2.14</td>
-<td>0.6</td>
-<td>91.592666</td>
-<td>8.407334</td>
-<td>5.478743</td>
-<td>2012-06-19 04:30:00</td>
-<td>2012-06-20 23:00:00</td>
-</tr>
-<tr>
-<th>10</th>
-<td>5</td>
-<td>2015</td>
-<td>7</td>
-<td>Minnesota</td>
-<td>MN</td>
-<td>MRO</td>
-<td>East North Central</td>
-<td>1.2</td>
-<td>warm</td>
-<td>severe weather</td>
-<td>...</td>
-<td>2279</td>
-<td>1700.5</td>
-<td>18.2</td>
-<td>2.14</td>
-<td>0.6</td>
-<td>91.592666</td>
-<td>8.407334</td>
-<td>5.478743</td>
-<td>2015-07-18 02:00:00</td>
-<td>2015-07-19 07:00:00</td>
-</tr>
-</tbody>
-</table>
-<p>5 rows × 54 columns</p>
-</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>(1534, 11)
+</pre>
 </div>
 </div>
 </div>
@@ -7778,7 +7630,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Data-Visualization">Data Visualization<a class="anchor-link" href="#Data-Visualization">¶</a></h1><p>The provided code utilizes the matplotlib and seaborn libraries to create histograms for four key columns in the power outage dataset: 'OUTAGE.DURATION', 'DEMAND.LOSS.MW', 'CUSTOMERS.AFFECTED', and 'RES.PRICE'. Below are some objectives we are attempting to find by illustrating these graphs.</p>
+<h1 id="Data-Visualization">Data Visualization<a class="anchor-link" href="#Data-Visualization">¶</a></h1><p>The provided code utilizes the plotly libraries to create histograms for four key columns in the power outage dataset: 'OUTAGE.DURATION', 'DEMAND.LOSS.MW', 'CUSTOMERS.AFFECTED', and 'RES.PRICE'. Below are some objectives we are attempting to find by illustrating these graphs.</p>
 <h2 id="Distribution-of-OUTAGE.DURATION">Distribution of OUTAGE.DURATION<a class="anchor-link" href="#Distribution-of-OUTAGE.DURATION">¶</a></h2><p>Objective:</p>
 <ul>
 <li>Understand the distribution of outage durations to identify common patterns and outliers.</li>
@@ -7827,13 +7679,10 @@ a.anchor-link {
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
-
-<span class="c1"># Plot distribution of OUTAGE.DURATION</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Plot distribution of OUTAGE.DURATION</span>
 <span class="n">fig1</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">outage_cleaned</span><span class="p">[</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">],</span> <span class="n">nbinsx</span><span class="o">=</span><span class="mi">30</span><span class="p">)])</span>
 <span class="n">fig1</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'Distribution of OUTAGE.DURATION'</span><span class="p">,</span> <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">'Duration (minutes)'</span><span class="p">,</span> <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">'Frequency'</span><span class="p">)</span>
 <span class="n">fig1</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig1</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">r</span><span class="s1">'Assets\Distribution_of_OUTAGE.html'</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">'cdn'</span><span class="p">)</span>
 
 <span class="c1"># Plot distribution of DEMAND.LOSS.MW</span>
 <span class="n">fig2</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="n">go</span><span class="o">.</span><span class="n">Histogram</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">outage_cleaned</span><span class="p">[</span><span class="s1">'DEMAND.LOSS.MW'</span><span class="p">],</span> <span class="n">nbinsx</span><span class="o">=</span><span class="mi">30</span><span class="p">)])</span>
@@ -7880,9 +7729,11 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Exploratory-Data-Analysis-(EDA)-Visualizations">Exploratory Data Analysis (EDA) Visualizations<a class="anchor-link" href="#Exploratory-Data-Analysis-(EDA)-Visualizations">¶</a></h1><h2 id="Uncovering-Patterns-and-Comparisons">Uncovering Patterns and Comparisons<a class="anchor-link" href="#Uncovering-Patterns-and-Comparisons">¶</a></h2><p>In this section, we delve into visualizations aimed at uncovering patterns and making insightful comparisons within the power outage dataset. Utilizing scatter plots and box plots, we explore relationships between outage duration and affected customers, as well as variations in customer impact across different NERC regions. These visualizations serve as a foundational step in understanding the nuances and potential factors influencing power outage events.</p>
-<h3 id="Scatter-Plot-of-OUTAGE.DURATION-vs.-CUSTOMERS.AFFECTED">Scatter Plot of OUTAGE.DURATION vs. CUSTOMERS.AFFECTED<a class="anchor-link" href="#Scatter-Plot-of-OUTAGE.DURATION-vs.-CUSTOMERS.AFFECTED">¶</a></h3><p>Description:
+<h3 id="Scatter-Plot-of-OUTAGE.DURATION-vs.-CUSTOMERS.AFFECTED">Scatter Plot of OUTAGE.DURATION vs. CUSTOMERS.AFFECTED<a class="anchor-link" href="#Scatter-Plot-of-OUTAGE.DURATION-vs.-CUSTOMERS.AFFECTED">¶</a></h3><p><strong>Description:</strong>
 This scatter plot is created to visually assess the potential correlation or pattern between the duration of power outages ('OUTAGE.DURATION') and the number of customers affected ('CUSTOMERS.AFFECTED'). Each point on the plot represents a specific power outage event, with the x-axis indicating the duration of the outage in minutes and the y-axis representing the number of affected customers. By examining the distribution of points, one can infer whether longer durations tend to result in a higher number of affected customers or if there are other patterns worth exploring.</p>
-<h3 id="Box-Plot-of-NERC.REGION-vs.-CUSTOMERS.AFFECTED">Box Plot of NERC.REGION vs. CUSTOMERS.AFFECTED<a class="anchor-link" href="#Box-Plot-of-NERC.REGION-vs.-CUSTOMERS.AFFECTED">¶</a></h3><p>Description:
+<h3 id="Scatter-Plot-of-OUTAGE.RESTORATION-vs.-CUSTOMERS.AFFECTED">Scatter Plot of OUTAGE.RESTORATION vs. CUSTOMERS.AFFECTED<a class="anchor-link" href="#Scatter-Plot-of-OUTAGE.RESTORATION-vs.-CUSTOMERS.AFFECTED">¶</a></h3><p><strong>Description:</strong>
+This scatter plot provides a visual representation of the relationship between the restoration time of power outages ('OUTAGE.RESTORATION') and the number of customers affected ('CUSTOMERS.AFFECTED'). Each point on the plot corresponds to a specific power outage event, with the x-axis depicting the restoration time and the y-axis representing the number of affected customers. The plot allows for an exploration of patterns and trends, enabling observations about whether quicker restoration times correlate with fewer affected customers or if there are notable outliers indicating unusual scenarios. The tooltips include information about the state and cause category for each data point, providing additional context for the analysis.</p>
+<h3 id="Box-Plot-of-NERC.REGION-vs.-CUSTOMERS.AFFECTED">Box Plot of NERC.REGION vs. CUSTOMERS.AFFECTED<a class="anchor-link" href="#Box-Plot-of-NERC.REGION-vs.-CUSTOMERS.AFFECTED">¶</a></h3><p><strong>Description:</strong>
 This box plot is designed to compare the distribution of the number of customers affected ('CUSTOMERS.AFFECTED') across different NERC (North American Electric Reliability Corporation) regions. Each box represents the interquartile range (IQR) of the data for a specific region, with the median indicated by the horizontal line inside the box. Outliers are also displayed as individual points. By examining these box plots, one can gain insights into the variations in the impact of power outages on customers across different NERC regions.</p>
 </div>
 </div>
@@ -7899,15 +7750,23 @@ This box plot is designed to compare the distribution of the number of customers
 <span class="n">fig1</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Scatter Plot of OUTAGE.DURATION vs. CUSTOMERS.AFFECTED'</span><span class="p">)</span>
 <span class="n">fig1</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'OUTAGE.DURATION (minutes)'</span><span class="p">)</span>
 <span class="n">fig1</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">)</span>
+
 <span class="n">fig1</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig1</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">r</span><span class="s1">'Assets\scatter.html'</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">'cdn'</span><span class="p">)</span>
+
+<span class="c1"># Create a scatter plot using Plotly Express</span>
+<span class="n">outage_cleaned</span><span class="p">[</span><span class="s1">'OUTAGE.RESTORATION'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="p">[</span><span class="s1">'OUTAGE.RESTORATION'</span><span class="p">])</span>
+<span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'OUTAGE.RESTORATION'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Bivariate Analysis: OUTAGE.RESTORATION vs CUSTOMERS.AFFECTED'</span><span class="p">,</span>
+                 <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">'OUTAGE.RESTORATION'</span><span class="p">:</span> <span class="s1">'Outage Restoration'</span><span class="p">,</span> <span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">:</span> <span class="s1">'Customers Affected'</span><span class="p">},</span>
+                 <span class="n">hover_data</span><span class="o">=</span><span class="p">[</span><span class="s1">'U.S._STATE'</span><span class="p">,</span> <span class="s1">'CAUSE.CATEGORY'</span><span class="p">])</span>
+
+<span class="c1"># Show the plot</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="c1"># Create a box plot</span>
-<span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'NERC.REGION'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Box Plot of NERC.REGION vs. CUSTOMERS.AFFECTED'</span><span class="p">)</span>
-<span class="n">fig2</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'NERC.REGION'</span><span class="p">)</span>
-<span class="n">fig2</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">)</span>
-<span class="n">fig2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig2</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">r</span><span class="s1">'Assets\box_plot.html'</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">'cdn'</span><span class="p">)</span>
+<span class="n">fig3</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">outage_cleaned</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'NERC.REGION'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">'Box Plot of NERC.REGION vs. CUSTOMERS.AFFECTED'</span><span class="p">)</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">update_xaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'NERC.REGION'</span><span class="p">)</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">update_yaxes</span><span class="p">(</span><span class="n">title_text</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">)</span>
+<span class="n">fig3</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -7917,6 +7776,9 @@ This box plot is designed to compare the distribution of the number of customers
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+</div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 </div>
@@ -8930,7 +8792,7 @@ Average Customers Affected by Climate Region and Cause Category:
             &lt;meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" /&gt;
             &lt;style&gt;
-                #map_4b037623b809f3869f6e9bb3c4e0f958 {
+                #map_1af777f1e1da5de61abb30a321c3a887 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -8945,14 +8807,14 @@ Average Customers Affected by Climate Region and Cause Category:
 &lt;body&gt;
     
     
-            &lt;div class="folium-map" id="map_4b037623b809f3869f6e9bb3c4e0f958" &gt;&lt;/div&gt;
+            &lt;div class="folium-map" id="map_1af777f1e1da5de61abb30a321c3a887" &gt;&lt;/div&gt;
         
 &lt;/body&gt;
 &lt;script&gt;
     
     
-            var map_4b037623b809f3869f6e9bb3c4e0f958 = L.map(
-                "map_4b037623b809f3869f6e9bb3c4e0f958",
+            var map_1af777f1e1da5de61abb30a321c3a887 = L.map(
+                "map_1af777f1e1da5de61abb30a321c3a887",
                 {
                     center: [46.7296, -94.6859],
                     crs: L.CRS.EPSG3857,
@@ -8966,16 +8828,16 @@ Average Customers Affected by Climate Region and Cause Category:
 
         
     
-            var tile_layer_9c687a4d88b7da861c071fb3136818e8 = L.tileLayer(
+            var tile_layer_f5a4841aa882842e4446f51a0cb3845d = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                 {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_4b037623b809f3869f6e9bb3c4e0f958);
+            ).addTo(map_1af777f1e1da5de61abb30a321c3a887);
         
     
-            var heat_map_9adc17083487db3c9d038680ac2ee675 = L.heatLayer(
+            var heat_map_e2a295c1fd8f8397b88c5c6d7c7a0c37 = L.heatLayer(
                 [[33.2588817, -86.8295337, 94328.8], [64.4459613, -149.680909, 14273.0], [34.395342, -111.763275, 64402.666666666664], [35.2048883, -92.4479108, 47673.846153846156], [36.7014631, -118.755997, 201365.71653543308], [38.7251776, -105.607716, 41060.63636363636], [41.6500201, -72.7342163, 60339.230769230766], [38.6920451, -75.4013315, 3475.0], [38.89384735, -76.98804281910948, 194709.22222222222], [27.7567667, -81.4639835, 289369.0909090909], [32.3293809, -83.1137366, 120680.1875], [19.593801499999998, -155.42837009716908, 147237.2], [43.6447642, -114.015407, 5833.333333333333], [40.0796606, -89.4337288, 207027.1590909091], [40.3270127, -86.1746933, 69551.44117647059], [41.9216734, -93.3122705, 94000.0], [38.27312, -98.5821872, 108000.0], [37.5726028, -85.1551411, 130531.0], [30.8703881, -92.007126, 151003.1], [45.709097, -68.8590201, 54839.35294117647], [39.5162401, -76.9382069, 120534.86666666667], [42.3788774, -72.032366, 77983.4], [43.6211955, -84.6824346, 152878.24444444446], [45.9896587, -94.6113288, 124006.57142857143], [32.9715285, -89.7348497, 5000.0], [38.7604815, -92.5617875, 50611.07692307692], [41.7370229, -99.5873816, 87070.66666666667], [39.5158825, -116.853722, 22220.0], [43.4849133, -71.6553992, 13869.818181818182], [40.0757384, -74.4041622, 160216.8064516129], [34.5802074, -105.9960475, 166666.66666666666], [40.7127281, -74.0060152, 190675.86666666667], [35.6729639, -79.0392919, 99624.83333333333], [47.6201461, -100.540737, 34500.0], [40.2253569, -82.6881395, 136782.61111111112], [34.9550817, -97.2684063, 160683.2105263158], [43.9792797, -120.737257, 43958.583333333336], [40.9699889, -77.7278831, 168536.82352941178], [33.6874388, -80.4363743, 251913.125], [35.7730076, -86.2820081, 59317.35294117647], [31.2638905, -98.5456116, 223232.09574468085], [39.4225192, -111.714358, 10227.727272727272], [44.5990718, -72.5002608, 0.0], [37.1232245, -78.4927721, 149429.0588235294], [38.8950368, -77.0365427, 101944.02272727272], [38.4758406, -80.8408415, 179794.33333333334], [44.4308975, -89.6884637, 45876.0], [43.1700264, -107.568534, 11833.333333333334]],
                 {"blur": 15, "maxZoom": 18, "minOpacity": 0.5, "radius": 25}
-            ).addTo(map_4b037623b809f3869f6e9bb3c4e0f958);
+            ).addTo(map_1af777f1e1da5de61abb30a321c3a887);
         
 &lt;/script&gt;
 &lt;/html&gt;' style="position:absolute;width:100%;height:100%;left:0;top:0;border:none !important;" webkitallowfullscreen=""></iframe></div></div>
@@ -9014,7 +8876,6 @@ Average Customers Affected by Climate Region and Cause Category:
 
 <span class="c1"># Show the plot</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">write_html</span><span class="p">(</span><span class="sa">r</span><span class="s1">'Assets\avg_outage_duration.html'</span><span class="p">,</span> <span class="n">include_plotlyjs</span><span class="o">=</span><span class="s1">'cdn'</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -9040,6 +8901,28 @@ Average Customers Affected by Climate Region and Cause Category:
 </div>
 </div>
 </div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="NMAR-Analysis">NMAR Analysis<a class="anchor-link" href="#NMAR-Analysis">¶</a></h1><p>We believe the column CAUSE.CATEGORY.DETAIL is likely to be NMAR as the column revolves around a detailed description of the event categories, and too complex of a description may cause nothing to be marked down instead. Possible data that could help make it MAR would be the uniqueness or complexity of the cause since more complex causes may not be easily inputed into the data.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="Missingness-Dependency">Missingness Dependency<a class="anchor-link" href="#Missingness-Dependency">¶</a></h1>
+</div>
+</div>
+</div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -9048,21 +8931,9 @@ Average Customers Affected by Climate Region and Cause Category:
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># NMAR Analysis</span>
-
-<span class="c1"># We believe the column CAUSE.CATEGORY.DETAIL is likely to be NMAR as the column</span>
-<span class="c1"># revolves around a detailed description of the event categories, and too complex</span>
-<span class="c1"># of a description may cause nothing to be marked down instead. Possible data </span>
-<span class="c1"># that could help make it MAR would be the uniqueness or complexity of the cause</span>
-<span class="c1"># since more complex causes may not be easily inputed into the data.</span>
-
-
-<span class="c1"># Missingness Dependency</span>
-
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'outage.csv'</span><span class="p">)</span>
-
-<span class="k">def</span> <span class="nf">ks_query</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">dependent</span><span class="p">):</span>
-    <span class="n">mar</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">ks_query</span><span class="p">(</span><span class="n">missing</span><span class="p">,</span> <span class="n">dependent</span><span class="p">):</span>
+    <span class="n">mar</span> <span class="o">=</span> <span class="n">outage_cleaned</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mar</span><span class="p">[</span><span class="n">dependent</span><span class="p">]</span> <span class="o">=</span> <span class="n">mar</span><span class="p">[</span><span class="n">dependent</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">mar</span><span class="p">[</span><span class="s1">'missing'</span><span class="p">]</span> <span class="o">=</span> <span class="n">mar</span><span class="p">[</span><span class="n">missing</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">ks_2samp</span><span class="p">(</span><span class="n">mar</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'missing'</span><span class="p">)[</span><span class="n">dependent</span><span class="p">],</span> <span class="n">mar</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s1">'not missing'</span><span class="p">)[</span><span class="n">dependent</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">res</span>
@@ -9070,14 +8941,17 @@ Average Customers Affected by Climate Region and Cause Category:
 <span class="n">dur_vs_cust</span> <span class="o">=</span> <span class="n">ks_query</span><span class="p">(</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">,</span> <span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">)</span>
 <span class="n">dur_vs_sales</span> <span class="o">=</span> <span class="n">ks_query</span><span class="p">(</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">,</span> <span class="s1">'TOTAL.SALES'</span><span class="p">)</span>
 
-<span class="n">duration_missing</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">dur_vs_cust</span><span class="p">,</span> <span class="n">dur_vs_sales</span><span class="p">)</span>
+
+<span class="n">duration_missing</span> <span class="o">=</span> <span class="n">outage_cleaned</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <span class="n">duration_missing</span><span class="p">[</span><span class="s1">'missing'</span><span class="p">]</span> <span class="o">=</span> <span class="n">duration_missing</span><span class="p">[</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span>
 
-<span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">duration_missing</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'missing'</span><span class="p">,</span> <span class="n">histnorm</span><span class="o">=</span><span class="s1">'probability'</span><span class="p">,</span> <span class="n">marginal</span><span class="o">=</span><span class="s1">'box'</span><span class="p">,</span>
+<span class="n">fig1</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">duration_missing</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'CUSTOMERS.AFFECTED'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'missing'</span><span class="p">,</span> <span class="n">histnorm</span><span class="o">=</span><span class="s1">'probability'</span><span class="p">,</span> <span class="n">marginal</span><span class="o">=</span><span class="s1">'box'</span><span class="p">,</span>
              <span class="n">title</span><span class="o">=</span><span class="s2">"customers affected by missingness of outage duration"</span><span class="p">,</span> <span class="n">barmode</span><span class="o">=</span><span class="s1">'overlay'</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
 
-<span class="c1"># px.histogram(duration_missing, x='TOTAL.SALES', color='missing', histnorm='probability', marginal='box',</span>
-<span class="c1">#              title="total sales by missingness of outage duration", barmode='overlay', opacity=0.7)</span>
+<span class="n">fig2</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">duration_missing</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">'TOTAL.SALES'</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">'missing'</span><span class="p">,</span> <span class="n">histnorm</span><span class="o">=</span><span class="s1">'probability'</span><span class="p">,</span> <span class="n">marginal</span><span class="o">=</span><span class="s1">'box'</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="s2">"total sales by missingness of outage duration"</span><span class="p">,</span> <span class="n">barmode</span><span class="o">=</span><span class="s1">'overlay'</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">fig2</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -9087,6 +8961,13 @@ Average Customers Affected by Climate Region and Cause Category:
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>KstestResult(statistic=0.12307261003644519, pvalue=0.3376185403211189, statistic_location=430000.0, statistic_sign=-1) KstestResult(statistic=0.21325109802822168, pvalue=0.010450324966936536, statistic_location=19970292.0, statistic_sign=-1)
+</pre>
+</div>
+</div>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 </div>
@@ -9103,27 +8984,6 @@ Average Customers Affected by Climate Region and Cause Category:
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="c1"># Null Hypothesis</span>
-<span class="c1"># The duration of outages in the years 2005 comes from the same population as 2015.</span>
-
-<span class="c1"># Alternative Hypothesis</span>
-<span class="c1"># The duration of outages in the year 2015 are shorter than the duration of outages in 2005</span>
-
-<span class="c1"># Test Statistic</span>
-<span class="c1"># Difference in group means</span>
-</pre></div>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper" tabindex="0">
@@ -9133,8 +8993,8 @@ Average Customers Affected by Climate Region and Cause Category:
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h1 id="Permutation-Test-for-Mean-Outage-Duration-(2005-vs.-2015)">Permutation Test for Mean Outage Duration (2005 vs. 2015)<a class="anchor-link" href="#Permutation-Test-for-Mean-Outage-Duration-(2005-vs.-2015)">¶</a></h1><p>In this section, we perform a permutation test to assess whether there is a significant difference in the mean outage duration between the years 2005 and 2015.</p>
 <h2 id="Hypotheses">Hypotheses<a class="anchor-link" href="#Hypotheses">¶</a></h2><ul>
-<li><strong>Null Hypothesis (H0):</strong> There is no difference in mean outage duration between the years 2005 and 2015.</li>
-<li><strong>Alternative Hypothesis (H1):</strong> There is a significant difference in mean outage duration between the years 2005 and 2015.</li>
+<li><strong>Null Hypothesis (H0):</strong> There is no difference in mean outage duration for outages that occured in 2005 and in 2015.</li>
+<li><strong>Alternative Hypothesis (H1):</strong> The mean outage duration for outages that occured in 2005 is larger than those that occured in 2015.</li>
 </ul>
 <h2 id="Test-Statistic">Test Statistic<a class="anchor-link" href="#Test-Statistic">¶</a></h2><p>We choose the difference in mean outage duration between the two years as our test statistic. The observed difference is calculated using the actual data, and we compare this against a distribution of differences obtained by shuffling the outage duration data.</p>
 <h2 id="Significance-Level">Significance Level<a class="anchor-link" href="#Significance-Level">¶</a></h2><p>We set the significance level at 0.05, which is a common choice in hypothesis testing.</p>
@@ -9165,7 +9025,7 @@ Average Customers Affected by Climate Region and Cause Category:
 <h2 id="Results">Results<a class="anchor-link" href="#Results">¶</a></h2><p>The resulting p-value is the probability of observing a difference in mean outage duration as extreme as the observed difference under the assumption that there is no true difference between the years 2005 and 2015.</p>
 <h2 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">¶</a></h2><ul>
 <li><strong>P-value:</strong> 0.0</li>
-<li><strong>Conclusion:</strong> If the p-value is less than the chosen significance level (0.05), we reject the null hypothesis in favor of the alternative hypothesis, suggesting a significant difference in mean outage duration between the years 2005 and 2015.</li>
+<li><strong>Conclusion:</strong> If the p-value is less than the chosen significance level (0.05), we reject the null hypothesis in favor of the alternative hypothesis, suggesting a significant difference in mean outage duration between the years 2005 and 2015. From our tests, we have sufficient evidence to reject our null hypothesis. We therefore reject the idea that outage durations have stayed the same over the past 10 years.</li>
 </ul>
 <h2 id="Justification">Justification<a class="anchor-link" href="#Justification">¶</a></h2><ul>
 <li>The choice of a permutation test is appropriate when the assumptions of parametric tests are not met, or the distribution of the data is unknown.</li>
@@ -9183,12 +9043,17 @@ Average Customers Affected by Climate Region and Cause Category:
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-ipython3"><pre><span></span><span class="n">n_repetitions</span> <span class="o">=</span> <span class="mi">500</span>
+<div class="highlight hl-ipython3"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">outage_cleaned</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">n_repetitions</span> <span class="o">=</span> <span class="mi">500</span>
 
-<span class="n">shuffled</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'2005'</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'2015'</span><span class="p">))]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-<span class="n">shuffled</span><span class="p">[</span><span class="s1">'old_year'</span><span class="p">]</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'2005'</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="n">shuffled</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2005</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2015</span><span class="p">)]</span>
+<span class="n">shuffled</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">'old_year'</span><span class="p">]</span> <span class="o">=</span> <span class="n">shuffled</span><span class="p">[</span><span class="s1">'OUTAGE.START'</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">year</span> <span class="o">==</span> <span class="mi">2005</span>
+
 
 <span class="n">observed_difference</span> <span class="o">=</span> <span class="n">shuffled</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'old_year'</span><span class="p">)[</span><span class="s1">'OUTAGE.DURATION'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
 
 <span class="n">differences</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_repetitions</span><span class="p">):</span>
@@ -9205,7 +9070,12 @@ Average Customers Affected by Climate Region and Cause Category:
     
     <span class="n">differences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">difference</span><span class="p">)</span>
 
-<span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">differences</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">observed_difference</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">differences</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">observed_difference</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">differences</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">differences</span><span class="p">,</span> <span class="n">histnorm</span><span class="o">=</span><span class="s1">'probability'</span><span class="p">,</span> <span class="n">marginal</span><span class="o">=</span><span class="s1">'box'</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="s2">"Empirical Distribution of the Mean Difference"</span><span class="p">,</span> <span class="n">barmode</span><span class="o">=</span><span class="s1">'overlay'</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_vline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">observed_difference</span><span class="p">,</span> <span class="n">line_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">line_dash</span><span class="o">=</span><span class="s2">"dash"</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -9215,11 +9085,15 @@ Average Customers Affected by Climate Region and Cause Category:
 <div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
-<div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
-<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
-<pre>0.0</pre>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>[183.71818181818207, -107.77999640223061, -370.99280446123385, -156.99454545454546, -893.5616118006835, 1114.507670604832, 18.541827541827388, -108.50925925925912, 725.1467889908258, 108.71680479633233, 86.58374701231878, 696.4375, 402.7172619047619, 1565.2782578028566, -153.25580140313014, 630.9715776218745, 58.40178571428578, -388.2333153444865, -222.6201507630076, -510.91454545454553, 663.7699430199427, 339.76181818181794, 779.4127272727274, 1493.3050608358315, 3.1692823135249455, -79.21143592572162, -1644.9381551362685, 308.4981484746959, 1279.7272086051844, -443.72531030760956, 5.681818181818471, 13.392876416621675, 642.2781818181816, -410.1901709401709, -427.3636697922411, -781.4838999820113, -1069.3065476190475, -15.755765199161488, 333.55059523809496, 213.5776797205367, -567.4531828601657, -710.5922044493475, 291.2628205128203, 664.6199999999999, -884.9072727272728, 169.59900717043547, 2254.1472727272726, 524.023159480324, -410.979897725269, -317.2563636363634, -573.5328296456198, 1391.601818181818, 256.0090909090909, 369.12606837606836, 632.5664644236072, -851.6272727272726, 833.3425925925926, 567.765965101637, -717.1399999999999, -567.0069865784149, 471.0579240870661, -516.7456377046233, 652.0401151286201, -207.45259938837944, 1707.5, 596.6636363636362, 447.1975175391258, 840.2466270912037, -1169.7739343116702, -6.429487179487296, 814.3800000000001, 995.2172619047619, -547.369658119658, 162.68732193732194, 440.0684523809523, -369.1254545454549, -812.3839031339032, 596.9716859716864, -450.7599715099718, -272.07440476190504, 329.20535714285734, 349.55341880341894, -153.96909090909094, 611.3254545454547, -319.5956621407163, 279.59902860226657, 1081.295248078267, 319.51082251082244, -187.27818181818202, 225.49272727272728, -357.57636363636357, 444.67087177556004, 245.11800683576166, -389.4779202279201, -1224.7181818181816, 876.9836363636364, 78.6132397913293, -105.11894586894596, 847.7299874078071, -823.8594604126258, 905.3230796905914, 207.931462493254, -914.3943739658025, -1318.1872727272728, 575.0982142857142, -372.4123931623931, -402.013532763533, -1706.1969778737182, 374.46727272727276, 310.3095880554056, 152.89583333333348, -36.258547008546884, -52.52909090909088, -536.8643640942616, 984.6179168915273, -893.5181818181816, 471.8473095737245, -225.68874643874642, -155.25281385281414, 259.4434523809523, 519.0405982905982, 878.6935064935064, 1289.8841474166816, 829.3824786324785, -1145.5781615398455, -1088.0733590733591, -552.3690909090908, 303.48951781970663, -296.95090909090914, 459.0345454545454, -300.9946033459255, 599.1191395477113, 226.9919102776248, -914.9467530131317, -146.40545454545418, 310.1181818181817, -196.94711279007015, -293.7236818903193, 351.3830012343501, -374.2172619047619, 8.06931421217132, 272.2020147508547, -319.96102428921085, 19.57617051013267, 348.3568376068374, -758.7981818181818, 349.7748192558629, -547.8254985754984, -200.56054131054134, -664.485119047619, -136.14458689458706, -1424.0742939377585, 381.16964285714266, -494.46824968519513, -535.0334757834758, 938.1372622858221, 559.2527272727275, -532.5470408346825, -518.5876956287102, 477.36181818181785, 41.513041914013684, -523.3072727272727, 837.1669364993704, 175.37884511602806, 728.5069881201957, -527.4525993883792, -1891.9280626780628, -290.9856591285161, -499.418780356179, -83.47692590549741, -728.7131825703254, 1104.8591652877367, 1170.3491635186188, 361.85842777477956, -981.7800000000002, 904.3290909090906, 728.1858974358975, -733.0391737891737, 155.42559523809496, -251.01638176638153, -324.9989206691853, -907.8482142857142, -694.3036363636363, -1023.4950142450141, -931.2374527792767, 589.8527302813018, 845.5713257780176, 851.9072727272724, -492.816878102592, -332.2808059003419, -13.413690476190823, -1364.3778874977957, 1552.2999470992772, 123.53144654088055, 1274.3112535612536, -1144.8010433531213, -560.1233682662255, 1041.5534105534102, 1082.6854545454548, 29.464468347734055, 1371.0918803418801, 792.3819032200036, 735.369090909091, 189.9426155783417, 779.4127272727274, 592.4024216524217, -239.05056980056997, -141.70014245014227, 62.874563242487966, 30.602868174296873, 1710.7646626218054, -195.93165128977625, 397.8570929419984, 71.29131054131085, -380.14230294480694, 1181.9732142857142, 312.88675213675197, -602.0744047619048, 855.3065476190477, 401.63188405797064, -272.8345454545456, 513.1033278176137, -45.03489836301469, 1372.055341055341, -407.91891891891873, 700.0662393162393, -1473.93175806736, -1034.3958333333333, -882.6243928764168, 1162.6344916344915, 1610.1909090909091, -978.3538406188163, -953.9508547008547, 717.3596866096868, 1020.8663375066126, -31.651196258319942, 182.14601139601155, -691.6769626769626, -174.6631054131053, -455.20545454545436, 88.61353189924648, -595.2180547894834, -598.5945454545454, -745.0744738262279, -36.31552706552702, 285.3363095238092, -932.014570966001, 138.03085875506986, 594.9950142450143, 882.0745454545454, -143.815254542184, -779.8108108108108, -287.0143408714839, -130.64601139601155, -73.0641862105449, -206.35887749595258, -399.30698005698014, 87.95797720797736, 882.6272727272731, 383.66776981062685, -815.2054545454544, -1111.7571225071224, -483.25629711344027, -539.6490163633018, 126.14984372127219, -768.7046231336574, 452.8958333333335, -27.113247863248034, -527.970398970399, 1089.4445670159957, 1296.8468660968663, 116.3539253539252, -583.9791666666667, 146.63604302592148, 548.6417378917376, -827.6272727272726, 823.2292364662317, 501.68181818181847, -39.38000000000011, -43.29871274907464, -919.8198005698007, 1120.4935897435896, -312.32692307692287, -135.0452289023715, -164.25648097076692, 197.5363636363636, -85.77421652421663, 701.8839285714284, 476.7929818374182, 72.50363636363636, 466.30060672917807, 498.0268033819034, -358.62202380952385, 858.0449656145302, -1080.4248942820373, 261.18727272727256, 178.5690909090913, 176.1836363636362, 101.09188034188037, 644.0565476190477, 284.44364772936206, -302.84077955506564, 407.86686651384207, -103.23511904761926, 846.8117300974445, 200.53444864184212, 127.74727272727296, -288.4168015830187, -273.2198237093003, 464.75463212808063, -719.458355819392, -21.256363636363403, -837.1702279202277, -270.01121529692955, -341.31454545454517, 1023.1636904761908, 115.15090909090895, 753.727468969239, 342.37290879654574, 1088.1545454545453, 689.6381818181817, -1055.7733039161608, 313.5705128205127, -89.84829059829053, -2.360606594957062, -741.7571225071224, 471.259399172513, -1063.845353553165, -467.1816258155527, 271.8041310541312, 1827.7618181818182, 1358.670909090909, -414.60612535612563, -486.0562543675751, -712.7521136895125, -568.9202962440488, -345.14648842025963, -347.772727272727, -88.94851994851979, -72.10416666666652, 740.721818181818, 708.3436363636365, 355.12797619047615, 1320.8798345026084, -193.1254545454549, 174.05486598309062, 577.1602564102564, -727.4381818181819, 1664.2257834757834, -154.22522522522513, 529.0180180180182, 645.1944444444443, 1238.1334965166636, 177.01942795466812, -105.46082621082633, 1050.3072727272724, 56.52142479280565, 104.20057564310127, -741.0161899622233, 751.3385500989389, -170.0272727272727, 498.1041666666665, 1057.1201654973916, -167.9375, -511.46736532450814, 2113.812727272727, -12.68375607123562, -607.2827380952383, 354.482193732194, -830.1696428571427, 888.7349351639973, -38.61647778377437, 116.64809707666836, -860.4127272727274, 1504.4537037037037, -993.3240740740739, 179.952363020147, -822.2303732303733, -104.91951566951548, 219.93636363636324, -653.8758963044679, 1058.4527272727273, -92.15598290598291, -76.70375595133146, -1225.010296010296, 15.868141752113843, -1844.4476925905497, 895.5087554132929, 134.32181818181834, 275.2381818181816, 58.34326162897605, -271.68876741315444, -481.5501011215297, 1098.8255081849252, -389.4018181818178, 63.68909090909119, -143.86538461538476, -1275.8244047619048, -269.88109372189274, 942.1460113960115, -1642.4636363636366, -891.1873219373219, 26.77272727272748, 1025.9203094081672, -327.31267806267806, -20.051987767583796, -82.1531531531532, 528.0434472934476, 555.6745454545453, -783.7290909090909, 197.74257960064733, 169.85267134376681, -313.75455046883644, 433.7836363636361, -128.87731606404031, -937.7363636363636, 895.4795826587515, -351.81410256410254, 530.55056980057, -853.9254545454546, 271.89272727272737, -369.4163636363637, -657.7403913347309, -903.6127272727274, -1779.044612340349, -715.7172364672363, -418.2243209210292, 166.69599717862775, 338.60066188637575, -45.189031916769636, 132.9545454545455, 381.7975899077387, 1031.7568330100512, 318.97301672962794, -57.398148148148266, -506.12202380952385, -709.1075498575501, -788.5355279726571, 207.0056486537378, -910.0825688073396, 639.6062241410323, -127.14173789173765, -266.3696708041016, 1854.7888109372188, 554.0565476190477, 888.1636904761908, 240.47454545454548, 49.88864903759668, -511.99658211908627, -394.66727272727303, -1417.358181818182, 240.34016909516095, 570.2656695156697, 761.2600000000002, 1057.3116883116884, 365.602715570446, 153.4756251124304, 374.1196258319842, 439.0233855009892, 600.6782496782498, 965.9436363636364, -262.6885910774113, -705.3184523809525, -540.4526538529362, -560.2236363636364, -371.9038970199258, 417.55911680911686, 303.02, 1871.1398809523807, 758.7886904761908, 1503.1654545454546, 408.802122683936, -429.62205432631754, 801.2018181818185, -1262.1872727272728, 313.18780356179195, -1322.4345454545457, 762.6069264069265, -1872.7764294907151, -1101.7081643449128, -336.0233498804928, -150.79464285714266, -293.66363636363667, 272.5163817663815, 1013.8030221262816, -599.1089754893319, 304.23655333693114, 531.0064102564106, -352.4675491818348, -1080.8927272727274, 1392.1254545454544, -393.1246438746439, -36.94711279007015, 446.30527073214625, 483.0345454545454, 1551.4118404118403, -820.8291059543083, -495.72909090909116, 823.0446428571427, -485.43065299514274]
+</pre>
 </div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 </div>
 </div>
 </div>
