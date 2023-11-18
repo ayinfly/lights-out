@@ -8,36 +8,133 @@ by Luke Lin (lul018@ucsd.edu) & Andrew ()
 
 In this project, we analyze a dataset of power outages across different U.S. states. The dataset provides detailed information about each power outage, including the cause, duration, number of customers affected, and various other factors. Our analysis is centered around the question: “How has outage handling improved over the last decade?”
 
-The dataset contains 1000 rows and the following columns are relevant to our question:
-- ‘U.S._STATE’: The state where the power outage occurred.
-- ‘OUTAGE.DURATION’: The duration of the power outage in minutes.
+The dataset contains over 1000 rows and the following columns are relevant to our question:
+
+## Essential Columns Explanation
+
+### U.S._STATE
+- **Description:** The state where the power outage occurred.
+- **Purpose:** To identify the geographic location of each power outage event.
+
+### OUTAGE.START & OUTAGE.RESTORATION
+- **Description:** The timestamp indicating when the power outage started and restored.
+- **Calculation:** Derived by combining 'OUTAGE.START.DATE' and 'OUTAGE.START.TIME' into a single datetime column.
+- **Calculation:** Derived by combining 'OUTAGE.RESTORATION.DATE' and 'OUTAGE.RESTORATION.TIME' into a single datetime column.
+- **Purpose:** To determine when the power was restored after an outage, providing insights into outage recovery times.
+
+### CUSTOMERS.AFFECTED
+- **Description:** The number of customers affected by the power outage.
+- **Purpose:** Quantifies the impact of the outage in terms of the affected customer base.
+
+### OUTAGE.DURATION
+- **Description:** The duration of the power outage in minutes.
+- **Purpose:** Measures the length of time that the power outage persisted, providing crucial information for outage management and planning.
+
+### DEMAND.LOSS.MW
+- **Description:** The amount of demand loss in megawatts during the power outage.
+- **Purpose:** Indicates the reduction in electrical demand during the outage, helping to assess the magnitude of the impact.
+
+### RES.PRICE
+- **Description:** The residential electricity price during the outage.
+- **Purpose:** Provides information on the residential electricity pricing during the outage event.
+
+### NERC.REGION
+- **Description:** The region assigned by the North American Electric Reliability Corporation (NERC) where the outage occurred.
+- **Purpose:** Helps categorize and analyze outages based on regional factors.
+
+### CLIMATE.REGION
+- **Description:** The climate region associated with the outage location.
+- **Purpose:** Considers climate-related factors that might influence power outages.
+
+### CAUSE.CATEGORY
+- **Description:** The category specifying the cause of the power outage.
+- **Purpose:** Classifies outages based on the reasons for their occurrence, aiding in root cause analysis.
+
+### TOTAL.SALES
+- **Description:** Total electricity sales during the outage.
+- **Purpose:** Provides information on the overall electricity sales during the outage period.
+
+Here’s the head of the DataFrame:
+
+| U.S._STATE   | OUTAGE.START        | OUTAGE.RESTORATION   |   CUSTOMERS.AFFECTED |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   RES.PRICE | NERC.REGION   | CLIMATE.REGION     | CAUSE.CATEGORY     |   TOTAL.SALES |
+|:-------------|:--------------------|:---------------------|---------------------:|------------------:|-----------------:|------------:|:--------------|:-------------------|:-------------------|--------------:|
+| Minnesota    | 2011-07-01 17:00:00 | 2011-07-03 20:00:00  |                70000 |              3060 |              nan |       11.6  | MRO           | East North Central | severe weather     |       6562520 |
+| Minnesota    | 2014-05-11 18:38:00 | 2014-05-11 18:39:00  |                  nan |                 1 |              nan |       12.12 | MRO           | East North Central | intentional attack |       5284231 |
+| Minnesota    | 2010-10-26 20:00:00 | 2010-10-28 22:00:00  |                70000 |              3000 |              nan |       10.87 | MRO           | East North Central | severe weather     |       5222116 |
+| Minnesota    | 2012-06-19 04:30:00 | 2012-06-20 23:00:00  |                68200 |              2550 |              nan |       11.79 | MRO           | East North Central | severe weather     |       5787064 |
+| Minnesota    | 2015-07-18 02:00:00 | 2015-07-19 07:00:00  |               250000 |              1740 |              250 |       13.07 | MRO           | East North Central | severe weather     |       5970339 |
+
+In the next sections, we will illustrate the process through which we obtained this cleaned dataframe. Additionally, we will employ compelling visualizations to delve deeper into our primary research question.
 
 ## Cleaning and EDA
 
 We started by cleaning the dataset, handling missing values, and converting data types where necessary. We then performed an exploratory data analysis to understand the distribution of power outages across different states, causes, and time periods.
 
-The data cleaning process involved replacing missing values with NaN and converting the ‘OUTAGE.DURATION’ column to numeric. This was necessary because the original data contained some non-numeric values in this column.
+### Step 1: Read the Excel file into a pandas DataFrame
 
-Here’s the head of the cleaned DataFrame:
+```python
+outage = pd.read_excel("outage.xlsx", sheet_name="Masterdata")
+```
 
+The dataset for our power outage analysis is stored in an Excel file. The conventional read_csv method, which we learned in class, was not applicable in this case. Therefore, we used the read_excel method and specified the sheet name to ensure that the output is a pandas dataframe, rather than a generic Excel object. Now, we have a pandas dataframe ready for further cleaning and analysis.
 
-|   OBS |   YEAR |   MONTH | U.S._STATE   | POSTAL.CODE   | NERC.REGION   | CLIMATE.REGION     |   ANOMALY.LEVEL | CLIMATE.CATEGORY   | CAUSE.CATEGORY     | CAUSE.CATEGORY.DETAIL   |   HURRICANE.NAMES |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   CUSTOMERS.AFFECTED |   RES.PRICE |   COM.PRICE |   IND.PRICE |   TOTAL.PRICE |   RES.SALES |   COM.SALES |   IND.SALES |   TOTAL.SALES |   RES.PERCEN |   COM.PERCEN |   IND.PERCEN |   RES.CUSTOMERS |   COM.CUSTOMERS |   IND.CUSTOMERS |   TOTAL.CUSTOMERS |   RES.CUST.PCT |   COM.CUST.PCT |   IND.CUST.PCT |   PC.REALGSP.STATE |   PC.REALGSP.USA |   PC.REALGSP.REL |   PC.REALGSP.CHANGE |   UTIL.REALGSP |   TOTAL.REALGSP |   UTIL.CONTRI |   PI.UTIL.OFUSA |   POPULATION |   POPPCT_URBAN |   POPPCT_UC |   POPDEN_URBAN |   POPDEN_UC |   POPDEN_RURAL |   AREAPCT_URBAN |   AREAPCT_UC |   PCT_LAND |   PCT_WATER_TOT |   PCT_WATER_INLAND | OUTAGE.START        | OUTAGE.RESTORATION   |
-|------:|-------:|--------:|:-------------|:--------------|:--------------|:-------------------|----------------:|:-------------------|:-------------------|:------------------------|------------------:|------------------:|-----------------:|---------------------:|------------:|------------:|------------:|--------------:|------------:|------------:|------------:|--------------:|-------------:|-------------:|-------------:|----------------:|----------------:|----------------:|------------------:|---------------:|---------------:|---------------:|-------------------:|-----------------:|-----------------:|--------------------:|---------------:|----------------:|--------------:|----------------:|-------------:|---------------:|------------:|---------------:|------------:|---------------:|----------------:|-------------:|-----------:|----------------:|-------------------:|:--------------------|:---------------------|
-|     1 |   2011 |       7 | Minnesota    | MN            | MRO           | East North Central |            -0.3 | normal             | severe weather     | nan                     |               nan |              3060 |              nan |                70000 |       11.6  |        9.18 |        6.81 |          9.28 |     2332915 |     2114774 |     2113291 |       6562520 |      35.5491 |      32.225  |      32.2024 |         2308736 |          276286 |           10673 |           2595696 |        88.9448 |        10.644  |       0.411181 |              51268 |            47586 |          1.07738 |                 1.6 |           4802 |          274182 |       1.75139 |             2.2 |      5348119 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 |            2.14 |          0.6 |    91.5927 |         8.40733 |            5.47874 | 2011-07-01 17:00:00 | 2011-07-03 20:00:00  |
-|     2 |   2014 |       5 | Minnesota    | MN            | MRO           | East North Central |            -0.1 | normal             | intentional attack | vandalism               |               nan |                 1 |              nan |                  nan |       12.12 |        9.71 |        6.49 |          9.28 |     1586986 |     1807756 |     1887927 |       5284231 |      30.0325 |      34.2104 |      35.7276 |         2345860 |          284978 |            9898 |           2640737 |        88.8335 |        10.7916 |       0.37482  |              53499 |            49091 |          1.08979 |                 1.9 |           5226 |          291955 |       1.79    |             2.2 |      5457125 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 |            2.14 |          0.6 |    91.5927 |         8.40733 |            5.47874 | 2014-05-11 18:38:00 | 2014-05-11 18:39:00  |
-|     3 |   2010 |      10 | Minnesota    | MN            | MRO           | East North Central |            -1.5 | cold               | severe weather     | heavy wind              |               nan |              3000 |              nan |                70000 |       10.87 |        8.19 |        6.07 |          8.15 |     1467293 |     1801683 |     1951295 |       5222116 |      28.0977 |      34.501  |      37.366  |         2300291 |          276463 |           10150 |           2586905 |        88.9206 |        10.687  |       0.392361 |              50447 |            47287 |          1.06683 |                 2.7 |           4571 |          267895 |       1.70627 |             2.1 |      5310903 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 |            2.14 |          0.6 |    91.5927 |         8.40733 |            5.47874 | 2010-10-26 20:00:00 | 2010-10-28 22:00:00  |
-|     4 |   2012 |       6 | Minnesota    | MN            | MRO           | East North Central |            -0.1 | normal             | severe weather     | thunderstorm            |               nan |              2550 |              nan |                68200 |       11.79 |        9.25 |        6.71 |          9.19 |     1851519 |     1941174 |     1993026 |       5787064 |      31.9941 |      33.5433 |      34.4393 |         2317336 |          278466 |           11010 |           2606813 |        88.8954 |        10.6822 |       0.422355 |              51598 |            48156 |          1.07148 |                 0.6 |           5364 |          277627 |       1.93209 |             2.2 |      5380443 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 |            2.14 |          0.6 |    91.5927 |         8.40733 |            5.47874 | 2012-06-19 04:30:00 | 2012-06-20 23:00:00  |
-|     5 |   2015 |       7 | Minnesota    | MN            | MRO           | East North Central |             1.2 | warm               | severe weather     | nan                     |               nan |              1740 |              250 |               250000 |       13.07 |       10.16 |        7.74 |         10.43 |     2028875 |     2161612 |     1777937 |       5970339 |      33.9826 |      36.2059 |      29.7795 |         2374674 |          289044 |            9812 |           2673531 |        88.8216 |        10.8113 |       0.367005 |              54431 |            49844 |          1.09203 |                 1.7 |           4873 |          292023 |       1.6687  |             2.2 |      5489594 |          73.27 |       15.28 |           2279 |      1700.5 |           18.2 |            2.14 |          0.6 |    91.5927 |         8.40733 |            5.47874 | 2015-07-18 02:00:00 | 2015-07-19 07:00:00  |
+### Step 2: Drop Informational Rows
 
----
+```python
+outage_cleaned = outage.drop(range(4)).dropna(axis=1, how='all')
+```
+
+In this step, we eliminated the initial rows from the Excel file. These rows contained the title of the Excel file, which was not relevant to our analysis and disrupted the desired column and row structure.
+
+### Step 3: Set Column Names Based on the First Row and  Remove Rows and Columns Related to Units and Variables
+
+```python
+outage_cleaned.columns = outage_cleaned.iloc[0]
+outage_cleaned = outage_cleaned.drop([4, 5])
+outage_cleaned = outage_cleaned.drop(columns="variables")
+```
+
+With the removal of the initial rows, the first row of the dataframe now contains our desired column names. We assigned these as our column names. After correctly setting the column names, we removed the first row from the dataframe. We also eliminated the subsequent row, which merely specified the unit for each column.
+
+### Step 4: Combining START and RESTORATION Times
+
+```python
+outage_cleaned['OUTAGE.START'] = pd.to_datetime(outage_cleaned['OUTAGE.START.DATE']) + pd.to_timedelta(outage_cleaned['OUTAGE.START.TIME'].astype(str))
+outage_cleaned['OUTAGE.RESTORATION'] = pd.to_datetime(outage_cleaned['OUTAGE.RESTORATION.DATE']) + pd.to_timedelta(outage_cleaned['OUTAGE.RESTORATION.TIME'].astype(str))
+outage_cleaned = outage_cleaned.drop(['OUTAGE.START.DATE', 'OUTAGE.START.TIME', 'OUTAGE.RESTORATION.DATE', 'OUTAGE.RESTORATION.TIME'], axis=1)
+```
+
+To avoid redundancy and retain all necessary information, we combined the START and RESTORATION times into single columns, subsequently dropping the original columns.
+
+### Step 5: Essential Columns Analysis
+
+```python
+essential_col = [
+    "U.S._STATE", 
+    'OUTAGE.START',
+    "OUTAGE.RESTORATION", 
+    "CUSTOMERS.AFFECTED", 
+    "OUTAGE.DURATION", 
+    "DEMAND.LOSS.MW", 
+    "RES.PRICE", 
+    "NERC.REGION", 
+    "CLIMATE.REGION",
+    "CAUSE.CATEGORY",
+    "TOTAL.SALES"
+]
+
+outage_cleaned = outage_cleaned[essential_col]
+```
+
+The above code retains only the columns essential for our analysis, ensuring a focused and efficient examination of the data.
 
 ## Univariate Analysis
-We first looked at the distribution of the ‘OUTAGE.DURATION’ column. The plot below shows that most power outages last less than 500 minutes, but there are some outages that last much longer.
+We first looked at the distribution of the OUTAGE.DURATION column. The plot below shows that most power outages last less than 10k minutes (or about 7 days), but there are some outages that last much longer.
 <iframe src="Assets/Distribution_of_OUTAGE.html" width=800 height=600 frameBorder=0></iframe>
 
 ## Bivariate Analysis
-Next, we looked at the average outage duration for each state. The plot below shows that some states tend to have longer power outages than others.
-<iframe src="Assets/avg_outage_duration.html" width=800 height=600 frameBorder=0></iframe>
+We further investigated the relationship between the duration of power outages ('OUTAGE.DURATION') and the number of customers affected ('CUSTOMERS.AFFECTED'). The scatter plot below illustrates a general trend where shorter outages tend to have fewer affected customers, while longer outages show a wider range of customer impacts. This suggests that the duration of an outage might be a factor in determining the scale of its impact on customers.
+<iframe src="Assets/scatter.html" width=800 height=600 frameBorder=0></iframe>
 
 ## Interesting Aggregates
 After seeing large swings in power outage durations, we also examined the average number of customers affected for each state. The table below shows that the average outage duration varies widely from state to state. The table below also includes the latitude and longtitude of each state to display on a heap map using Folium.
