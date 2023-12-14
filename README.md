@@ -155,3 +155,52 @@ From the plot, we can see that the model’s predictions are generally close to 
 ## Model Assessment
 
 Given the RMSE values and the scatter plot, we can conclude that our model is performing reasonably well. It’s able to predict the percentage of residential customers affected by a major power outage with a reasonable level of accuracy. In our case, the current level of accuracy is acceptable for the task because the RMSE values we obtained (23.27 on the training set and 21.38 on the test set) are small enough to be practically insignificant. A prediction error of this magnitude will not significantly affect the decisions or actions that are based on the model’s predictions. Thus, our model could be considered “good”.
+
+
+# Final Model
+
+## New Features
+
+In the development of the final model, three new features were added to the existing dataset: 'DEMAND.LOSS.MW', 'POPULATION', and 'CUSTOMERS.AFFECTED'. These features were carefully selected based on their relevance and potential impact on the prediction task, which is forecasting the 'RES.CUST.PCT' (percentage of residential customers affected by power outages). Below is an explanation of why each of these features is believed to improve the model’s performance:
+
+1. **'DEMAND.LOSS.MW' (Demand Loss in Megawatt)**
+   - **Rationale**: This feature represents the amount of power demand lost during an outage, measured in Megawatts. It is a direct indicator of the severity of an outage. Higher demand loss likely correlates with more significant impact on residential customers, making it a valuable predictor for the percentage of affected customers.
+   - **Impact on Model**: By quantifying the outage's impact in terms of lost power, this feature provides the model with a measurable scale of outage severity, which is expected to have a direct relationship with 'RES.CUST.PCT'.
+
+2. **'POPULATION'**
+   - **Rationale**: The total population in the affected area can be a crucial factor in understanding the extent of an outage's impact. Areas with higher populations might have more robust infrastructure to handle outages, or conversely, might see a higher percentage of affected customers due to the sheer number of people involved.
+   - **Impact on Model**: Including population allows the model to account for the scale of potential impact, offering a context for the outage data. The use of `QuantileTransformer` on this feature helps in normalizing its distribution and mitigating the influence of outliers, thereby making the model more robust.
+
+3. **'CUSTOMERS.AFFECTED'**
+   - **Rationale**: This feature directly measures the number of customers affected by each outage event. It serves as a straightforward indicator of the outage's impact and provides a clear link to the target variable 'RES.CUST.PCT'.
+   - **Impact on Model**: The inclusion of 'CUSTOMERS.AFFECTED' gives the model explicit information about the extent of each outage's impact, potentially improving its accuracy in predicting the percentage of affected residential customers.
+
+The addition of these features is based on the understanding that the severity of a power outage (represented by 'DEMAND.LOSS.MW'), the demographic context ('POPULATION'), and the direct impact ('CUSTOMERS.AFFECTED') are all critical factors in predicting the proportion of affected residential customers. These features were expected to provide the model with comprehensive and relevant information, leading to more accurate and reliable predictions.
+
+## Overview of the Modeling Algorithm
+The final model is built using a RandomForestRegressor. RandomForestRegressor operates by constructing a multitude of decision trees at training time and outputting the average prediction of the individual trees. This approach helps in reducing overfitting, improving the model's generalizability, and handling non-linear relationships between features and the target variable effectively.
+
+## Features and Preprocessing
+In addition to the original features ('U.S._STATE' and 'OUTAGE.DURATION'), the model integrates three new features: 'DEMAND.LOSS.MW', 'POPULATION', and 'CUSTOMERS.AFFECTED'. The preprocessing pipeline includes:
+- **StandardScaler**: Applied to 'OUTAGE.DURATION' and 'DEMAND.LOSS.MW' for normalizing these features, which helps in improving the model's performance.
+- **QuantileTransformer**: Used on 'POPULATION' and 'CUSTOMERS.AFFECTED' to transform these features to follow a normal distribution, thereby mitigating the effects of outliers and skewness in the data.
+- **OneHotEncoder**: Employed for the categorical variable 'U.S._STATE', enabling the model to better understand and use this non-numeric information.
+
+## Hyperparameter Tuning
+The hyperparameters of the RandomForestRegressor were tuned using GridSearchCV, an exhaustive search over specified parameter values. The following hyperparameters were considered:
+- **n_estimators**: Number of trees in the forest. Tested values were [100, 200].
+- **max_depth**: Maximum depth of the trees. Tested values were [10, 20].
+- **min_samples_split**: Minimum number of samples required to split an internal node. Tested values were [2, 5].
+
+The best performing hyperparameters were determined based on the lowest Root Mean Squared Error (RMSE) achieved during the cross-validation process in GridSearchCV. These were:
+- **n_estimators**: 200
+- **max_depth**: 20
+- **min_samples_split**: 2
+
+## Performance Improvement Over Baseline Model
+The final model demonstrated a significant improvement in performance over the baseline model, as evidenced by a lower RMSE of 8.6. This improvement can be attributed to the inclusion of additional relevant features and the application of appropriate preprocessing techniques, which enhanced the model's ability to capture and learn from the complexities in the data. Moreover, the optimized hyperparameters via GridSearchCV further refined the model's predictive capabilities, ensuring a better fit to the data while maintaining generalizability. Below is a visual of the predictions vs actual for newer model. The smaller spread and decrease in outliers demonstrates a stronger model
+
+<iframe src="Assets/new_regression.html" width=800 height=600 frameBorder=0></iframe>
+
+The use of RandomForestRegressor, with its inherent mechanisms for handling overfitting and non-linearity, combined with meticulous feature engineering and hyperparameter optimization, led to a robust and effective final model for predicting the percentage of residential customers affected by power outages.
+
