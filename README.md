@@ -307,7 +307,7 @@ The test statistic is the absolute difference in RMSE between the two groups. Th
 ## P-Value and Conclusion
 After running the permutation test for 1000 iterations, the p-value is calculated as the proportion of permutations where the observed test statistic is at least as extreme as the one calculated from the original dataset.
 
-**P-Value**: 0.054
+**P-Value**: 0.004
 
-**Conclusion**: With a p-value of 0.054, which is slightly above the commonly used significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is no significant evidence of unfairness in the model's performance between the Northern Half and the rest of the United States based on our statistical test. However, the p-value is close to the threshold, indicating that the possibility of a difference in model performance between these groups cannot be entirely dismissed. Further investigation or additional data might be required for a more conclusive understanding.
+**Conclusion**: With a p-value of 0.004, which is slightly above the commonly used significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is a significant evidence of unfairness in the model's performance between the Northern Half and the rest of the United States based on our statistical test.
 
