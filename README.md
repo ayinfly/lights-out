@@ -261,7 +261,7 @@ best_model = grid_search.best_estimator_
 
 # Evaluate the model
 y_pred = best_model.predict(X_test)
-,,,
+```
 
 ## Performance Improvement Over Baseline Model
 The final model demonstrated a significant improvement in performance over the baseline model, as evidenced by a lower RMSE of 8.6. This improvement can be attributed to the inclusion of additional relevant features and the application of appropriate preprocessing techniques, which enhanced the model's ability to capture and learn from the complexities in the data. Moreover, the optimized hyperparameters via GridSearchCV further refined the model's predictive capabilities, ensuring a better fit to the data while maintaining generalizability. Below is a visual of the predictions vs actual for newer model. The smaller spread and decrease in outliers demonstrates a stronger model
@@ -269,4 +269,27 @@ The final model demonstrated a significant improvement in performance over the b
 <iframe src="Assets/new_regression.html" width=800 height=600 frameBorder=0></iframe>
 
 The use of RandomForestRegressor, with its inherent mechanisms for handling overfitting and non-linearity, combined with meticulous feature engineering and hyperparameter optimization, led to a robust and effective final model for predicting the percentage of residential customers affected by power outages.
+
+# Fairness Analysis
+
+## Group Definition
+- **Group X (Northern Half)**: This group consists of data from the 'Northeast', 'Northwest', 'East North Central', and 'West North Central' climate regions. These regions are categorized as the Northern Half of the United States.
+- **Group Y (Everything Else)**: This group comprises data from all other climate regions, representing the rest of the United States.
+
+## Evaluation Metric
+The evaluation metric used is the Root Mean Squared Error (RMSE), a standard measure for assessing the accuracy of a regression model. It quantifies the difference between the predicted values and the actual values.
+
+## Hypotheses
+- **Null Hypothesis (H0)**: The model is fair across the different climate regions. The RMSE for Group X and Group Y are roughly the same, implying any observed differences are due to random chance.
+- **Alternative Hypothesis (H1)**: The model is unfair, showing a significant difference in RMSE between Group X (Northern Half) and Group Y (Everything Else).
+
+## Test Statistic and Significance Level
+The test statistic is the absolute difference in RMSE between the two groups. The permutation test involves shuffling the 'CLIMATE.REGION' labels and recalculating this difference. The significance level we choose is 0.05 as it is a common metric of significance.
+
+## P-Value and Conclusion
+After running the permutation test for 1000 iterations, the p-value is calculated as the proportion of permutations where the observed test statistic is at least as extreme as the one calculated from the original dataset.
+
+**P-Value**: 0.054
+
+**Conclusion**: With a p-value of 0.054, which is slightly above the commonly used significance level of 0.05, we fail to reject the null hypothesis. This suggests that there is no significant evidence of unfairness in the model's performance between the Northern Half and the rest of the United States based on our statistical test. However, the p-value is close to the threshold, indicating that the possibility of a difference in model performance between these groups cannot be entirely dismissed. Further investigation or additional data might be required for a more conclusive understanding.
 
