@@ -213,7 +213,7 @@ The hyperparameters of the RandomForestRegressor were tuned using GridSearchCV, 
 The best performing hyperparameters were determined based on the lowest Root Mean Squared Error (RMSE) achieved during the cross-validation process in GridSearchCV. These were:
 - **n_estimators**: 200
 - **max_depth**: 20
-- **min_samples_split**: 2
+- **min_samples_split**: 5
 
 ## Model
 ```python
@@ -282,7 +282,7 @@ y_pred = best_model.predict(X_test)
 ```
 
 ## Performance Improvement Over Baseline Model
-The final model demonstrated a significant improvement in performance over the baseline model, as evidenced by a lower RMSE of 8.6. This improvement can be attributed to the inclusion of additional relevant features and the application of appropriate preprocessing techniques, which enhanced the model's ability to capture and learn from the complexities in the data. Moreover, the optimized hyperparameters via GridSearchCV further refined the model's predictive capabilities, ensuring a better fit to the data while maintaining generalizability. Below is a visual of the predictions vs actual for newer model. The smaller spread and decrease in outliers demonstrates a stronger model
+The final model demonstrated a significant improvement in performance over the baseline model, as evidenced by a lower RMSE of 0.0016. This improvement can be attributed to the inclusion of additional relevant features and the application of appropriate preprocessing techniques, which enhanced the model's ability to capture and learn from the complexities in the data. Moreover, the optimized hyperparameters via GridSearchCV further refined the model's predictive capabilities, ensuring a better fit to the data while maintaining generalizability. Below is a visual of the predictions vs actual for newer model. The smaller spread and decrease in outliers demonstrates a stronger model
 
 <iframe src="Assets/new_regression.html" width=800 height=600 frameBorder=0></iframe>
 
