@@ -197,6 +197,72 @@ The best performing hyperparameters were determined based on the lowest Root Mea
 - **max_depth**: 20
 - **min_samples_split**: 2
 
+## Model
+```python
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, QuantileTransformer
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
+
+# Select features and target
+features = processed_outage[['U.S._STATE', 'OUTAGE.DURATION', 'DEMAND.LOSS.MW', 'POPULATION', 'CUSTOMERS.AFFECTED']]
+target = processed_outage['RES.CUST.PCT']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(features, target, test_size=0.3, random_state=42)
+
+# Preprocessing for numerical columns
+num_processor = Pipeline([
+    ('scaler', StandardScaler())
+])
+
+# Preprocessing for numerical columns using quantiles
+qnt_processor = Pipeline([
+    ('quantile', QuantileTransformer(n_quantiles=400, output_distribution='normal'))
+])
+
+# Preprocessing for categorical columns
+cat_processor = Pipeline([
+    ('encoder', OneHotEncoder(handle_unknown='ignore'))
+])
+
+# Combine preprocessing
+preprocessor = ColumnTransformer(
+    transformers=[
+        ('num', num_processor, ['OUTAGE.DURATION', 'DEMAND.LOSS.MW']),
+        ('qnt', qnt_processor, ['POPULATION', 'CUSTOMERS.AFFECTED']),
+        ('cat', cat_processor, ['U.S._STATE'])
+    ])
+
+# Define the model
+model = RandomForestRegressor()
+
+# Create the pipeline
+pipeline = Pipeline(steps=[
+    ('preprocessor', preprocessor),
+    ('model', model)
+])
+
+# Define the grid search
+param_grid = {
+    'model__n_estimators': [100, 200],
+    'model__max_depth': [10, 20],
+    'model__min_samples_split': [2, 5]
+}
+grid_search = GridSearchCV(pipeline, param_grid, cv=5)
+
+# Fit the model
+grid_search.fit(X_train, y_train)
+
+# Best model
+best_model = grid_search.best_estimator_
+
+# Evaluate the model
+y_pred = best_model.predict(X_test)
+,,,
+
 ## Performance Improvement Over Baseline Model
 The final model demonstrated a significant improvement in performance over the baseline model, as evidenced by a lower RMSE of 8.6. This improvement can be attributed to the inclusion of additional relevant features and the application of appropriate preprocessing techniques, which enhanced the model's ability to capture and learn from the complexities in the data. Moreover, the optimized hyperparameters via GridSearchCV further refined the model's predictive capabilities, ensuring a better fit to the data while maintaining generalizability. Below is a visual of the predictions vs actual for newer model. The smaller spread and decrease in outliers demonstrates a stronger model
 
