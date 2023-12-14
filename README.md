@@ -1,18 +1,21 @@
 # Lights Out: Forecasting Residential Impact of Power Outages
+
 In this project, we are tackling a regression problem. Our goal is to predict the percentage of residential customers (RES.CUST.PCT) affected by a major power outage. We chose this as our response variable because it provides a quantifiable measure of the impact of power outages on residential customers.
 
-(CHANGE LINE AS SOON AS ANDREW PUSHES HIS CODE)
-The features we are using to train our model include U.S._STATE and OUTAGE.DURATION. These features were chosen because they are known at the “time of prediction” and are expected to have a significant influence on the percentage of residential customers affected by an outage.
+The features we are using to train our model include `U.S._STATE`, `OUTAGE.DURATION`, `DEMAND.LOSS.MW`, `POPULATION`, and `CUSTOMERS.AFFECTED`. These features were chosen because they are known at the time of prediction and based on our assumptions, they are expected to have a significant influence on the percentage of residential customers affected by an outage.
 
 ## Model Evaluation
 To evaluate our model, we are using the Root Mean Squared Error (RMSE). This metric was chosen because it is suitable for regression problems and it penalizes large errors more due to the squaring of the residuals. This makes it a good choice for our problem where we want to minimize the difference between the actual and predicted percentages of residential customers affected by an outage.
 
 ## Feature Selection
-Our target variable is RES.CUST.PCT, which represents the percentage of residential customers affected by a major power outage. To predict this, we’ve selected two features: U.S._STATE and OUTAGE.DURATION.
+Our target variable is RES.CUST.PCT, which represents the percentage of residential customers affected by a major power outage. To predict this, we’ve selected several features: 
 
-- U.S._STATE: This is a categorical variable representing the U.S. state where the outage occurred. The rationale behind including this feature is that the impact of an outage can vary by location due to factors such as infrastructure, population density, and local policies. By including the state as a feature, our model can learn these regional differences.
-- OUTAGE.DURATION: This is a numerical variable representing the duration of the power outage. It’s reasonable to assume that longer outages will affect more customers, making this a potentially powerful feature for our prediction problem.
-- ADD ANDREW"S FEATURES LATER
+- `U.S._STATE`: This is a categorical variable representing the U.S. state where the outage occurred. The rationale behind including this feature is that the impact of an outage can vary by location due to factors such as infrastructure, population density, and local policies. By including the state as a feature, our model can learn these regional differences.
+- `OUTAGE.DURATION`: This is a numerical variable representing the duration of the power outage. It’s reasonable to assume that longer outages will affect more customers, making this a potentially powerful feature for our prediction problem.
+- `DEMAND.LOSS.MW`: The amount of peak demand lost during an outage.
+- `POPULATION`: The population in the area of the outage.
+- `CUSTOMERS.AFFECTED`: Number of customers affected by the outage.
+
 
 ## Model Description and Feature Selection
 
