@@ -45,43 +45,40 @@ Before training the model, we preprocess the data:
 
 - **Converting Date/Time Columns:** We convert the OUTAGE.START and OUTAGE.RESTORATION columns to datetime format and create a new feature for outage duration in minutes.
 
-- **Encoding Categorical Variables:** We encode the categorical variables using scikit-learn’s LabelEncoder.
-
 ```python
-from sklearn.preprocessing import LabelEncoder
-
 processed_outage = outage_cleaned.copy()
 
-# Fill numerical columns with the mean
-num_cols = processed_outage.select_dtypes(include=[np.number]).columns
-processed_outage[num_cols] = processed_outage[num_cols].fillna(processed_outage[num_cols].mean())
-
-# Fill categorical columns with the mode
-cat_cols = processed_outage.select_dtypes(include=['object']).columns
-processed_outage[cat_cols] = processed_outage[cat_cols].fillna(processed_outage[cat_cols].mode().iloc[0])
-
-# 2. Convert Date/Time Columns
+# Convert Date/Time Columns
 processed_outage['OUTAGE.START'] = pd.to_datetime(processed_outage['OUTAGE.START'])
 processed_outage['OUTAGE.RESTORATION'] = pd.to_datetime(processed_outage['OUTAGE.RESTORATION'])
 
 # Create a new feature for outage duration in minutes
 processed_outage['OUTAGE.DURATION'] = (processed_outage['OUTAGE.RESTORATION'] - processed_outage['OUTAGE.START']).dt.total_seconds() / 60
 
-# 3. Encode Categorical Variables
-le = LabelEncoder()
-for col in cat_cols:
-    processed_outage[col] = le.fit_transform(processed_outage[col])
+# Fill numerical columns with the mean
+num_cols = ['OUTAGE.DURATION', 'DEMAND.LOSS.MW', 'POPULATION', 'CUSTOMERS.AFFECTED']
+for col in num_cols:
+    processed_outage[col] = processed_outage[col].fillna(processed_outage[col].mean())
+
+# Fill categorical columns with the mode
+cat_cols = ['U.S._STATE']
+processed_outage[cat_cols] = processed_outage[cat_cols].fillna(processed_outage[cat_cols].mode().iloc[0])
+
+# Convert RES.CUST.PCT to percentage 
+processed_outage["RES.CUST.PCT"] = processed_outage["RES.CUST.PCT"] / 100 
+
+processed_outage = processed_outage[['U.S._STATE', 'OUTAG
 ```
 
 The head of this processed table looks like so:
 
-|   OBS |   YEAR |   MONTH |   U.S._STATE |   POSTAL.CODE |   NERC.REGION |   CLIMATE.REGION |   ANOMALY.LEVEL |   CLIMATE.CATEGORY |   CAUSE.CATEGORY |   CAUSE.CATEGORY.DETAIL |   HURRICANE.NAMES |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   CUSTOMERS.AFFECTED |   RES.PRICE |   COM.PRICE |   IND.PRICE |   TOTAL.PRICE |   RES.SALES |   COM.SALES |   IND.SALES |   TOTAL.SALES |   RES.PERCEN |   COM.PERCEN |   IND.PERCEN |   RES.CUSTOMERS |   COM.CUSTOMERS |   IND.CUSTOMERS |   TOTAL.CUSTOMERS |   RES.CUST.PCT |   COM.CUST.PCT |   IND.CUST.PCT |   PC.REALGSP.STATE |   PC.REALGSP.USA |   PC.REALGSP.REL |   PC.REALGSP.CHANGE |   UTIL.REALGSP |   TOTAL.REALGSP |   UTIL.CONTRI |   PI.UTIL.OFUSA |   POPULATION |   POPPCT_URBAN |   POPPCT_UC |   POPDEN_URBAN |   POPDEN_UC |   POPDEN_RURAL |   AREAPCT_URBAN |   AREAPCT_UC |   PCT_LAND |   PCT_WATER_TOT |   PCT_WATER_INLAND | OUTAGE.START        | OUTAGE.RESTORATION   |
-|------:|-------:|--------:|-------------:|--------------:|--------------:|-----------------:|----------------:|-------------------:|-----------------:|------------------------:|------------------:|------------------:|-----------------:|---------------------:|------------:|------------:|------------:|--------------:|------------:|------------:|------------:|--------------:|-------------:|-------------:|-------------:|----------------:|----------------:|----------------:|------------------:|---------------:|---------------:|---------------:|-------------------:|-----------------:|-----------------:|--------------------:|---------------:|----------------:|--------------:|----------------:|-------------:|---------------:|------------:|---------------:|------------:|---------------:|----------------:|-------------:|-----------:|----------------:|-------------------:|:--------------------|:---------------------|
-|     0 |     11 |       6 |           23 |            23 |             6 |                1 |              13 |                  1 |                5 |                      44 |                20 |               570 |                0 |                  201 |         328 |         225 |         237 |           270 |         342 |         337 |         487 |           346 |          444 |          279 |          729 |             177 |             148 |             176 |               175 |            343 |             66 |            225 |                275 |                7 |              286 |                  63 |            173 |             191 |           157 |              20 |          158 |             24 |          31 |             33 |          35 |             16 |              17 |           17 |         16 |              33 |                 43 | 2011-07-01 17:00:00 | 2011-07-03 20:00:00  |
-|     1 |     14 |       4 |           23 |            23 |             6 |                1 |              15 |                  1 |                2 |                      44 |                20 |                 1 |                0 |                    0 |         363 |         269 |         210 |           270 |         211 |         272 |         445 |           275 |           99 |          395 |          855 |             180 |             157 |             161 |               179 |            331 |             76 |            209 |                321 |               13 |              306 |                  66 |            196 |             208 |           171 |              20 |          163 |             24 |          31 |             33 |          35 |             16 |              17 |           17 |         16 |              33 |                 43 | 2014-05-11 18:38:00 | 2014-05-11 18:39:00  |
-|     2 |     10 |       9 |           23 |            23 |             6 |                1 |               1 |                  0 |                5 |                      20 |                20 |               562 |                0 |                  201 |         268 |         146 |         171 |           173 |         199 |         269 |         462 |           269 |           51 |          412 |          885 |             176 |             149 |             165 |               174 |            342 |             69 |            217 |                266 |                6 |              269 |                  74 |            166 |             183 |           135 |              19 |          157 |             24 |          31 |             33 |          35 |             16 |              17 |           17 |         16 |              33 |                 43 | 2010-10-26 20:00:00 | 2010-10-28 22:00:00  |
-|     3 |     12 |       5 |           23 |            23 |             6 |                1 |              15 |                  1 |                5 |                      36 |                20 |               522 |                0 |                  194 |         338 |         230 |         228 |           264 |         260 |         303 |         467 |           304 |          194 |          354 |          826 |             178 |             153 |             182 |               176 |            341 |             68 |            229 |                281 |                9 |              278 |                  53 |            203 |             195 |           235 |              20 |          159 |             24 |          31 |             33 |          35 |             16 |              17 |           17 |         16 |              33 |                 43 | 2012-06-19 04:30:00 | 2012-06-20 23:00:00  |
-|     4 |     15 |       6 |           23 |            23 |             6 |                1 |              28 |                  2 |                5 |                      44 |                20 |               452 |              114 |                  460 |         427 |         303 |         312 |           352 |         288 |         343 |         432 |           314 |          331 |          524 |          625 |             181 |             158 |             160 |               181 |            328 |             78 |            204 |                333 |               15 |              310 |                  64 |            177 |             209 |           122 |              20 |          165 |             24 |          31 |             33 |          35 |             16 |              17 |           17 |         16 |              33 |                 43 | 2015-07-18 02:00:00 | 2015-07-19 07:00:00  |
+| U.S._STATE   |   OUTAGE.DURATION |   DEMAND.LOSS.MW |   POPULATION |   CUSTOMERS.AFFECTED |   RES.CUST.PCT |
+|:-------------|------------------:|-----------------:|-------------:|---------------------:|---------------:|
+| Minnesota    |              3060 |          536.287 |      5348119 |                70000 |       0.889448 |
+| Minnesota    |                 1 |          536.287 |      5457125 |               143456 |       0.888335 |
+| Minnesota    |              3000 |          536.287 |      5310903 |                70000 |       0.889206 |
+| Minnesota    |              2550 |          536.287 |      5380443 |                68200 |       0.888954 |
+| Minnesota    |              1740 |          250     |      5489594 |               250000 |       0.888216 |
 
 ## Model Training and Evaluation
 
@@ -137,11 +134,11 @@ The performance of our model is evaluated using the Root Mean Squared Error (RMS
 
 ## Training Performance
 
-Our model achieved an RMSE of 23.27 on the training set. This means that, on average, the model’s predictions on the training data were about 23.27 units away from the true values.
+Our model achieved an RMSE of 0.0041986 on the training set. This means that, on average, the model’s predictions on the training data were about 0.0041986 units away from the true values.
 
 ## Test Performance
 
-On the test set, the model achieved an RMSE of 21.38. This lower RMSE indicates that the model’s predictions were, on average, about 21.38 units away from the true values on unseen data, which is slightly better than its performance on the training set.
+On the test set, the model achieved an RMSE of 0.00325. This lower RMSE indicates that the model’s predictions were, on average, about 0.00325 units away from the true values on unseen data, which is slightly better than its performance on the training set.
 
 ## Visual Evaluation
 <iframe src="Assets/regression_line.html" width=800 height=600 frameBorder=0></iframe>
@@ -154,7 +151,7 @@ From the plot, we can see that the model’s predictions are generally close to 
 
 ## Model Assessment
 
-Given the RMSE values and the scatter plot, we can conclude that our model is performing reasonably well. It’s able to predict the percentage of residential customers affected by a major power outage with a reasonable level of accuracy. In our case, the current level of accuracy is acceptable for the task because the RMSE values we obtained (23.27 on the training set and 21.38 on the test set) are small enough to be practically insignificant. A prediction error of this magnitude will not significantly affect the decisions or actions that are based on the model’s predictions. Thus, our model could be considered “good”.
+Given the RMSE values and the scatter plot, we can conclude that our model is performing reasonably well. It’s able to predict the percentage of residential customers affected by a major power outage with a reasonable level of accuracy. In our case, the current level of accuracy is acceptable for the task because the RMSE values we obtained (0.004198 on the training set and 0.003259 on the test set) are small enough to be practically insignificant. A prediction error of this magnitude will not significantly affect the decisions or actions that are based on the model’s predictions. Thus, our model could be considered “good”.
 
 
 # Final Model
