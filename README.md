@@ -1,13 +1,15 @@
 # Lights Out: Forecasting Residential Impact of Power Outages
+by Luke Lin & Andrew Yin
 
+## Framing the Problem
 In this project, we are tackling a regression problem. Our goal is to predict the percentage of residential customers (RES.CUST.PCT) affected by a major power outage. We chose this as our response variable because it provides a quantifiable measure of the impact of power outages on residential customers.
 
 The features we are using to train our model include `U.S._STATE`, `OUTAGE.DURATION`, `DEMAND.LOSS.MW`, `POPULATION`, and `CUSTOMERS.AFFECTED`. These features were chosen because they are known at the time of prediction and based on our assumptions, they are expected to have a significant influence on the percentage of residential customers affected by an outage.
 
-## Model Evaluation
+### Model Evaluation
 To evaluate our model, we are using the Root Mean Squared Error (RMSE). This metric was chosen because it is suitable for regression problems and it penalizes large errors more due to the squaring of the residuals. This makes it a good choice for our problem where we want to minimize the difference between the actual and predicted percentages of residential customers affected by an outage.
 
-## Feature Selection
+### Feature Selection
 Our target variable is RES.CUST.PCT, which represents the percentage of residential customers affected by a major power outage. To predict this, we’ve selected several features: 
 
 - `U.S._STATE`: This is a categorical variable representing the U.S. state where the outage occurred. The rationale behind including this feature is that the impact of an outage can vary by location due to factors such as infrastructure, population density, and local policies. By including the state as a feature, our model can learn these regional differences.
@@ -16,8 +18,24 @@ Our target variable is RES.CUST.PCT, which represents the percentage of resident
 - `POPULATION`: The population in the area of the outage.
 - `CUSTOMERS.AFFECTED`: Number of customers affected by the outage.
 
+## Baseline Model
 
-## Model Description and Feature Selection
+### Cleaning the Data
+In this section, we’ve performed a series of data cleaning steps on the outage DataFrame, which was read from an Excel file named “outage.xlsx”. This process was a direct replication of the cleaning procedure implemented in Project 3, ensuring consistency and reliability in our data preparation phase.
+
+Initially, we removed informational rows and columns that contained only null values from the DataFrame. We then set the column names based on the first row of the DataFrame for better readability and understanding of the data.
+
+Next, we dropped rows related to units and variables that were not necessary for our analysis. We also dropped the “variables” column as it was not needed.
+
+One of the crucial steps in this process was the creation of new datetime columns, OUTAGE.START and OUTAGE.RESTORATION. These were formed by combining the respective date and time columns, providing us with precise timestamps of when the outage started and ended. After creating these new columns, the original date and time columns were dropped to avoid redundancy.
+
+Lastly, we replaced the “NA” entries with NaN for missing values.
+
+After these cleaning steps, we were left with a cleaned DataFrame, outage_cleaned, ready for further analysis or modeling.
+
+Our exploratory data analysis on this dataset can be found [Empowering Resilience: Unraveling the Tapestry of Power Outages Over a Decade](https://lukelin15.github.io/Power-Outage-Analysis/).
+
+### Model Description and Feature Selection
 
 Our baseline model is a Linear Regression model that predicts the percentage of residential customers (RES.CUST.PCT) affected by a major power outage. 
 
@@ -40,7 +58,7 @@ By focusing on `U.S._STATE` and `OUTAGE.DURATION`, we were able to build a model
 The 3D scatter plot visualizes the relationship between `OUTAGE.DURATION`, `POPULATION`, and the predicted percentage of residential customers (`PREDICTED`) affected by a major power outage. The data points are color-coded by `U.S._STATE`, meaning each point represents a different state in the USA. This plot provides a visual way to understand the model’s predictions and the relationships between these three variables. The color-coding by state in the 3D plot allows us to see if certain states have higher or lower percentages of residential customers affected by outages. The `OUTAGE.DURATION` trend along the x-axis suggests that the duration of the outage has an impact on the predicted percentage of residential customers affected. 
 
 
-## Data Preprocessing
+### Data Preprocessing
 
 Before training the model, we preprocess the data:
 
@@ -83,7 +101,7 @@ The head of this processed table looks like so:
 | Minnesota    |              2550 |          536.287 |      5380443 |                68200 |       0.888954 |
 | Minnesota    |              1740 |          250     |      5489594 |               250000 |       0.888216 |
 
-## Model Training and Evaluation
+### Model Training and Evaluation
 
 We train the model using a training set and evaluate its performance on a test set. The performance is measured using the root mean squared error (RMSE), a common metric for regression problems that measures the average magnitude of the prediction error.
 
@@ -152,7 +170,7 @@ The red line represents perfect predictions, where the predicted value is equal 
 
 From the plot, we can see that the model’s predictions are generally close to the actual values, indicating that the model is performing well. 
 
-## Model Assessment
+### Model Assessment
 
 Given the RMSE values and the scatter plot, we can conclude that our model is performing reasonably well. It’s able to predict the percentage of residential customers affected by a major power outage with a reasonable level of accuracy. In our case, the current level of accuracy is acceptable for the task because the RMSE values we obtained (0.004198 on the training set and 0.003259 on the test set) are small enough to be practically insignificant. A prediction error of this magnitude will not significantly affect the decisions or actions that are based on the model’s predictions. Thus, our model could be considered “good”.
 
